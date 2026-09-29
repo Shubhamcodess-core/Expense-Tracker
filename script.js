@@ -202,12 +202,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // =====================================================
     const API_BASE = '/api/expenses';
 
+    async function parseApiResponse(res) {
+        const contentType = res.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+            const raw = await res.text();
+            const cleanText = raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80);
+            throw new Error(`Server returned non-JSON response (${res.status}): ${cleanText || 'HTML/Text response'}`);
+        }
+        return await res.json();
+    }
+
     async function loadExpenses() {
         try {
             const res = await fetch(API_BASE);
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const data = await res.json();
-            if (!data.success) throw new Error(data.error || 'API error');
+            const data = await parseApiResponse(res);
+            if (!res.ok || !data.success) throw new Error(data.error || 'HTTP ' + res.status);
 
             if (data.expenses.length === 0) {
                 // First run: check localStorage for existing data to migrate
@@ -217,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (e) {
             console.error('Failed to load expenses from backend:', e);
-            showToast('Could not load expenses from server. Is the Node.js server running?', 'error', 8000);
+            showToast('Could not load expenses from server. Is the backend running?', 'error', 8000);
             expenses = [];
         }
     }
@@ -249,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ expenses: toMigrate, mode: 'replace' })
             });
-            const data = await res.json();
+            const data = await parseApiResponse(res);
             if (data.success) {
                 expenses = toMigrate;
                 // Clear localStorage expenses to avoid future duplication
@@ -814,8 +823,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify(payload)
             });
-            const data = await res.json();
-            if (!data.success) throw new Error(data.error || 'API error');
+            const data = await parseApiResponse(res);
+            if (!res.ok || !data.success) throw new Error(data.error || 'API error');
             // Update local array
             const index = expenses.findIndex(exp => exp.id === id);
             if (index !== -1) expenses[index] = data.expense;
@@ -982,8 +991,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify(expense)
             });
-            const data = await res.json();
-            if (!data.success) throw new Error(data.error || 'API error');
+            const data = await parseApiResponse(res);
+            if (!res.ok || !data.success) throw new Error(data.error || 'API error');
             expenses.push(data.expense);
             updateAll();
         } catch (e) {
@@ -1022,8 +1031,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch(`${API_BASE}/${encodeURIComponent(idToDelete)}`, {
                 method: 'DELETE'
             });
-            const data = await res.json();
-            if (!data.success) throw new Error(data.error || 'API error');
+            const data = await parseApiResponse(res);
+            if (!res.ok || !data.success) throw new Error(data.error || 'API error');
             expenses = expenses.filter(e => e.id !== idToDelete);
             updateAll();
             showToast('Expense deleted.', 'info', 2500);
@@ -1223,8 +1232,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         headers: { 'Content-Type': 'application/json' },
                         body:    JSON.stringify({ expenses: valid, mode: 'replace' })
                     });
-                    const bulkData = await res.json();
-                    if (!bulkData.success) throw new Error(bulkData.error || 'Bulk API error');
+                    const bulkData = await parseApiResponse(res);
+                    if (!res.ok || !bulkData.success) throw new Error(bulkData.error || 'Bulk API error');
                     expenses = valid;
                 } catch (apiErr) {
                     console.error('[restoreJSON] API error:', apiErr);
@@ -1350,11 +1359,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         headers: { 'Content-Type': 'application/json' },
                         body:    JSON.stringify({ expenses: imported, mode: 'merge' })
                     });
-                    const data = await res.json();
-                    if (!data.success) throw new Error(data.error || 'Bulk API error');
+                    const data = await parseApiResponse(res);
+                    if (!res.ok || !data.success) throw new Error(data.error || 'Bulk API error');
                     // Reload from backend so local state is consistent
                     const reload = await fetch(API_BASE);
-                    const reloadData = await reload.json();
+                    const reloadData = await parseApiResponse(reload);
                     if (reloadData.success) expenses = reloadData.expenses;
                     else imported.forEach(exp => expenses.push(exp));
                     updateAll();

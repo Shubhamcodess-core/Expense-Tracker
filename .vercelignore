@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Python & ML artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+*.egg-info/
+ML_Expense_Analyzer/__pycache__/
+ML_Expense_Analyzer/.venv/
+ML_Expense_Analyzer/logs/
+ML_Expense_Analyzer/reports/
+ML_Expense_Analyzer/models/*.joblib
+ML_Expense_Analyzer/models/*.pkl
+
+# Generated logs & temporary files
+*.log
+expenses_data.csv
+.git/
+
+# Windows desktop automation scripts
+*.bat
+
+# PDF generator script
+generate_project_pdf.py
