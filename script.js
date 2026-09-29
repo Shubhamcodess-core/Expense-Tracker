@@ -78,6 +78,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastContainer        = document.getElementById('toast-container');
     const liveBadge             = document.getElementById('live-badge');
     const rateStatusEl          = document.getElementById('rate-status');
+
+    // Auth & User Profile elements
+    let currentUser             = null;
+    let authMode                = 'login'; // 'login' or 'register'
+    const authOverlay           = document.getElementById('auth-overlay');
+    const tabLogin              = document.getElementById('tab-login');
+    const tabRegister           = document.getElementById('tab-register');
+    const authAlert             = document.getElementById('auth-alert');
+    const authForm              = document.getElementById('auth-form');
+    const authName              = document.getElementById('auth-name');
+    const authPassword          = document.getElementById('auth-password');
+    const authSubmitBtn         = document.getElementById('auth-submit-btn');
+    const authSubmitText        = document.getElementById('auth-submit-text');
+    const authSubtitle          = document.getElementById('auth-subtitle');
+    const authFooterPrompt      = document.getElementById('auth-footer-prompt');
+    const authToggleBtn         = document.getElementById('auth-toggle-btn');
+    const appWrapper            = document.getElementById('app-wrapper');
+    const userGreeting          = document.getElementById('user-greeting');
+    const logoutBtn             = document.getElementById('logout-btn');
     const rateStatusText        = document.getElementById('rate-status-text');
     const exchangeInfoEl        = document.getElementById('exchange-info');
     const exchangeRateDisplay   = document.getElementById('exchange-rate-display');
@@ -218,15 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await parseApiResponse(res);
             if (!res.ok || !data.success) throw new Error(data.error || 'HTTP ' + res.status);
 
-            if (data.expenses.length === 0) {
-                // First run: check localStorage for existing data to migrate
-                await migrateFromLocalStorage();
-            } else {
-                expenses = data.expenses;
-            }
+            expenses = Array.isArray(data.expenses) ? data.expenses : [];
         } catch (e) {
             console.error('Failed to load expenses from backend:', e);
-            showToast('Could not load expenses from server. Is the backend running?', 'error', 8000);
+            showToast('Could not load expenses: ' + e.message, 'error', 5000);
             expenses = [];
         }
     }
@@ -1575,22 +1589,150 @@ document.addEventListener('DOMContentLoaded', () => {
         // Backup / Restore JSON
         backupJsonBtn.addEventListener('click', backupJSON);
         restoreJsonInput.addEventListener('change', restoreJSON);
+
+        // Auth Tabs & Form
+        if (tabLogin) tabLogin.addEventListener('click', () => switchAuthMode('login'));
+        if (tabRegister) tabRegister.addEventListener('click', () => switchAuthMode('register'));
+        if (authToggleBtn) authToggleBtn.addEventListener('click', () => switchAuthMode(authMode === 'login' ? 'register' : 'login'));
+        if (authForm) authForm.addEventListener('submit', handleAuthSubmit);
+        if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
     }
 
     // =====================================================
-    //  INIT
+    //  AUTHENTICATION UI & LOGIC
     // =====================================================
-    async function init() {
-        loadSettings();
-        loadBudget();
-        populateCurrencySelector();
-        currencySelect.value = settings.currency;
-        updateCurrencyUI();
-        addEventListeners();
+    function setAuthAlert(msg, type = 'error') {
+        if (!authAlert) return;
+        if (!msg) {
+            authAlert.className = 'auth-alert hidden';
+            authAlert.textContent = '';
+            return;
+        }
+        authAlert.className = `auth-alert ${type}`;
+        authAlert.textContent = msg;
+    }
 
-        document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+    function switchAuthMode(mode) {
+        authMode = mode;
+        setAuthAlert(null);
+        if (mode === 'login') {
+            if (tabLogin) tabLogin.classList.add('active');
+            if (tabRegister) tabRegister.classList.remove('active');
+            if (authSubtitle) authSubtitle.textContent = 'Sign in to your private financial tracker';
+            if (authSubmitText) authSubmitText.textContent = 'Sign In';
+            if (authFooterPrompt) authFooterPrompt.textContent = "Don't have an account?";
+            if (authToggleBtn) authToggleBtn.textContent = 'Create one';
+        } else {
+            if (tabRegister) tabRegister.classList.add('active');
+            if (tabLogin) tabLogin.classList.remove('active');
+            if (authSubtitle) authSubtitle.textContent = 'Create your personal account & Drive storage';
+            if (authSubmitText) authSubmitText.textContent = 'Create Account';
+            if (authFooterPrompt) authFooterPrompt.textContent = 'Already have an account?';
+            if (authToggleBtn) authToggleBtn.textContent = 'Sign in';
+        }
+    }
 
-        // Load expenses from CSV backend first, then render UI
+    async function handleAuthSubmit(e) {
+        e.preventDefault();
+        setAuthAlert(null);
+
+        const name = (authName ? authName.value : '').trim();
+        const password = authPassword ? authPassword.value : '';
+
+        // Validation
+        if (!name) {
+            setAuthAlert('Please enter your name.', 'error');
+            if (authName) authName.focus();
+            return;
+        }
+        if (!password || password.length < 6) {
+            setAuthAlert('Password must contain at least 6 characters.', 'error');
+            if (authPassword) authPassword.focus();
+            return;
+        }
+
+        const endpoint = authMode === 'login' ? '/api/auth/login' : '/api/auth/register';
+        if (authSubmitBtn) authSubmitBtn.disabled = true;
+        if (authSubmitText) authSubmitText.textContent = authMode === 'login' ? 'Signing In...' : 'Creating Account...';
+
+        try {
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, password })
+            });
+            const data = await parseApiResponse(res);
+            if (!res.ok || !data.success) {
+                throw new Error(data.error || 'Authentication failed');
+            }
+
+            currentUser = data.user;
+            if (authForm) authForm.reset();
+            setAuthAlert(null);
+            showDashboardForUser();
+
+            const welcomeMsg = authMode === 'login'
+                ? `Welcome back, ${currentUser.name}!`
+                : `Account created! Welcome, ${currentUser.name}.`;
+            showToast(welcomeMsg, 'success', 3500);
+        } catch (err) {
+            setAuthAlert(err.message, 'error');
+        } finally {
+            if (authSubmitBtn) authSubmitBtn.disabled = false;
+            if (authSubmitText) authSubmitText.textContent = authMode === 'login' ? 'Sign In' : 'Create Account';
+        }
+    }
+
+    async function handleLogout() {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (err) {
+            console.warn('Logout API notice:', err);
+        }
+        currentUser = null;
+        expenses = [];
+        showAuthScreen();
+        showToast('Logged out successfully.', 'info', 3000);
+    }
+
+    function showDashboardForUser() {
+        if (authOverlay) authOverlay.classList.add('hidden');
+        if (appWrapper) appWrapper.style.display = '';
+        if (userGreeting && currentUser) {
+            userGreeting.textContent = currentUser.name;
+        }
+        loadUserDataAndRender();
+    }
+
+    function showAuthScreen() {
+        if (appWrapper) appWrapper.style.display = 'none';
+        if (authOverlay) authOverlay.classList.remove('hidden');
+        switchAuthMode('login');
+        if (authForm) authForm.reset();
+        setAuthAlert(null);
+    }
+
+    async function checkAuthSession() {
+        try {
+            const res = await fetch('/api/auth/me');
+            if (res.status === 401) {
+                showAuthScreen();
+                return;
+            }
+            const data = await parseApiResponse(res);
+            if (data.success && data.user) {
+                currentUser = data.user;
+                showDashboardForUser();
+            } else {
+                showAuthScreen();
+            }
+        } catch (err) {
+            console.warn('Session check:', err.message);
+            showAuthScreen();
+        }
+    }
+
+    async function loadUserDataAndRender() {
         await loadExpenses();
 
         populateCategories();
@@ -1610,6 +1752,25 @@ document.addEventListener('DOMContentLoaded', () => {
         updateBudgetUI();
         updatePeriodTotal();
         updateExtendedDashboard();
+    }
+
+    // =====================================================
+    //  INIT
+    // =====================================================
+    async function init() {
+        loadSettings();
+        loadBudget();
+        populateCurrencySelector();
+        currencySelect.value = settings.currency;
+        updateCurrencyUI();
+        addEventListeners();
+
+        document.getElementById('date').value = new Date().toISOString().slice(0, 10);
+
+        // Check authentication on startup:
+        // If authenticated -> load user expenses & show dashboard
+        // If not authenticated -> show auth screen (do NOT call expense API)
+        await checkAuthSession();
     }
 
     init();

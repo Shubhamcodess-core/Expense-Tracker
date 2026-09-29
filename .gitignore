@@ -1,3 +1,15 @@
+# Environment & Secrets (NEVER COMMIT)
+.env
+.env.*
+!.env.example
+*.env
+*.pem
+*.key
+*service-account*.json
+*credentials*.json
+google-credentials*.json
+client_secret*.json
+
 # Node dependencies
 node_modules/
 package-lock.json
@@ -12,6 +24,8 @@ ML_Expense_Analyzer/.venv/
 ML_Expense_Analyzer/logs/
 ML_Expense_Analyzer/reports/
 
-# Temporary / logs
+# Temporary / logs / PDFs
 *.log
 .DS_Store
+expenses_data.csv
+test_*.js

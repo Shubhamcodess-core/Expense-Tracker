@@ -94,7 +94,49 @@
         </div>
     </div>
 
-    <div class="app-wrapper">
+    <!-- Authentication Overlay Screen -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <h2>ExpenseIQ</h2>
+                <p class="auth-subtitle" id="auth-subtitle">Sign in to your private financial tracker</p>
+            </div>
+
+            <!-- Mode Switcher Tabs -->
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab active" id="tab-login" data-mode="login">Sign In</button>
+                <button type="button" class="auth-tab" id="tab-register" data-mode="register">Create Account</button>
+            </div>
+
+            <!-- Error / Status Message Alert -->
+            <div id="auth-alert" class="auth-alert hidden"></div>
+
+            <!-- Form -->
+            <form id="auth-form" class="auth-form" novalidate>
+                <div class="form-group">
+                    <label for="auth-name">Name</label>
+                    <input type="text" id="auth-name" placeholder="Enter your name" autocomplete="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="auth-password">Password</label>
+                    <input type="password" id="auth-password" placeholder="Enter password (min 6 characters)" autocomplete="current-password" required>
+                </div>
+                <button type="submit" id="auth-submit-btn" class="primary-btn auth-submit-btn">
+                    <span id="auth-submit-text">Sign In</span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <span id="auth-footer-prompt">Don't have an account?</span>
+                <button type="button" id="auth-toggle-btn" class="auth-link-btn">Create one</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-wrapper" id="app-wrapper" style="display:none;">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-logo">
@@ -205,6 +247,16 @@
                 <div class="top-bar-right">
                     <div class="live-badge" id="live-badge">
                         <span class="live-dot"></span> Live Rates
+                    </div>
+                    <div class="user-profile-badge" id="user-profile-badge">
+                        <span class="user-avatar-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </span>
+                        <span class="user-greeting" id="user-greeting">User</span>
+                        <button type="button" id="logout-btn" class="logout-btn" title="Log Out">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                            <span>Logout</span>
+                        </button>
                     </div>
                 </div>
             </header>

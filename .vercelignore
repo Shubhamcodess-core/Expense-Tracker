@@ -1,3 +1,14 @@
+# Environment & Secrets (NEVER COMMIT OR DEPLOY)
+.env
+.env.*
+*.env
+*.pem
+*.key
+*service-account*.json
+*credentials*.json
+google-credentials*.json
+client_secret*.json
+
 # Dependencies
 node_modules/
 
@@ -20,6 +31,7 @@ ML_Expense_Analyzer/models/*.pkl
 *.log
 expenses_data.csv
 .git/
+test_*.js
 
 # Windows desktop automation scripts
 *.bat

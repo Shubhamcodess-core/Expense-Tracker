@@ -41,7 +41,7 @@ start http://localhost:3000
 echo.
 echo Server is running successfully!
 echo - Web App URL : http://localhost:3000
-echo - Data Storage: data\expenses.csv
+echo - Data Storage: Google Drive (users.csv & per-user CSVs)
 echo.
 echo You can close this window. To stop the server, run stop.bat
 ping -n 3 127.0.0.1 >nul
