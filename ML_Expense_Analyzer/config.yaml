@@ -1,0 +1,149 @@
+# Configuration for ML Expense Analyzer Project
+
+project:
+  name: "ML Expense Analyzer"
+  version: "1.0.0"
+  description: "Machine Learning project for personal expense analysis and prediction"
+  author: "Claude Code Assistant"
+  created_date: "2026-09-28"
+
+data:
+  raw_path: "data/raw/"
+  processed_path: "data/processed/"
+  external_path: "data/external/"
+
+  # Expected columns in expense data
+  required_columns:
+    - date
+    - amount
+    - category
+    - description
+
+  # Optional columns
+  optional_columns:
+    - currency
+    - payment_method
+    - merchant
+
+  # Date format for parsing
+  date_format: "%Y-%m-%d"
+
+  # Currency conversion (if multi-currency support needed)
+  base_currency: "USD"
+
+models:
+  # Model storage path
+  model_path: "models/"
+
+  # Classification models for expense categorization
+  classification:
+    algorithms:
+      - "random_forest"
+      - "xgboost"
+      - "lightgbm"
+      - "svm"
+      - "neural_network"
+    test_size: 0.2
+    random_state: 42
+    cross_validation_folds: 5
+
+  # Regression models for expense prediction
+  regression:
+    algorithms:
+      - "linear_regression"
+      - "ridge"
+      - "lasso"
+      - "gradient_boosting"
+      - "xgboost_regressor"
+    test_size: 0.2
+    random_state: 42
+    cross_validation_folds: 5
+
+  # Clustering models
+  clustering:
+    algorithms:
+      - "kmeans"
+      - "dbscan"
+    n_clusters_range: [2, 10]
+
+  # Anomaly detection
+  anomaly_detection:
+    algorithms:
+      - "isolation_forest"
+      - "one_class_svm"
+    contamination: 0.1
+
+visualization:
+  # Plot settings
+  figure_size: [12, 8]
+  style: "seaborn-v0_8"
+  color_palette: "husl"
+  save_format: ["png", "svg", "pdf"]
+  dpi: 300
+
+  # Interactive plots
+  interactive: true
+  theme: "plotly_white"
+
+evaluation:
+  # Metrics for classification
+  classification_metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1-score"
+    - "roc_auc"
+
+  # Metrics for regression
+  regression_metrics:
+    - "mae"
+    - "mse"
+    - "rmse"
+    - "r2"
+    - "mape"
+
+  # Significance level for statistical tests
+  alpha: 0.05
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_path: "logs/project.log"
+
+output:
+  reports_path: "reports/"
+  plots_path: "reports/plots/"
+  predictions_path: "reports/predictions/"
+
+# Feature engineering settings
+features:
+  # Time-based features
+  time_features:
+    - "hour"
+    - "day_of_week"
+    - "day_of_month"
+    - "month"
+    - "quarter"
+    - "is_weekend"
+    - "is_month_start"
+    - "is_month_end"
+
+  # Amount-based features
+  amount_features:
+    - "log_amount"
+    - "amount_zscore"
+    - "rolling_mean_7d"
+    - "rolling_std_7d"
+    - "expense_ratio_to_income"  # if income data available
+
+  # Text features (for descriptions)
+  text_features:
+    - "tfidf"
+    - "word_embeddings"
+    - "sentiment_score"
+
+  # Categorical encoding
+  categorical_encoding:
+    - "onehot"
+    - "label"
+    - "target"

@@ -1,0 +1,62 @@
+date,amount,category,description,currency,payment_method
+2026-01-01,25.5,Food,Groceries at Walmart,USD,Credit Card
+2026-01-02,15.0,Transport,Gas station fill-up,USD,Debit Card
+2026-01-02,12.75,Food,Coffee and pastry,USD,Cash
+2026-01-03,45.0,Shopping,New shirt and jeans,USD,Credit Card
+2026-01-03,28.5,Entertainment,Movie tickets and popcorn,USD,Credit Card
+2026-01-04,120.0,Bills,Electricity bill,USD,Bank Transfer
+2026-01-04,8.25,Food,Lunch special,USD,Cash
+2026-01-05,35.0,Health,Pharmacy prescription,USD,Debit Card
+2026-01-05,22.0,Food,Dinner at Italian restaurant,USD,Credit Card
+2026-01-06,7.5,Transport,Bus fare,USD,Cash
+2026-01-06,55.0,Shopping,Household supplies,USD,Credit Card
+2026-01-07,15.0,Food,Breakfast cafe,USD,Debit Card
+2026-01-07,90.0,Education,Online course subscription,USD,Credit Card
+2026-01-08,18.5,Food,Groceries for weekend,USD,Debit Card
+2026-01-08,25.0,Entertainment,Streaming service monthly,USD,Bank Transfer
+2026-01-09,12.0,Transport,Toll road fees,USD,Cash
+2026-01-09,35.0,Health,Dentist visit copay,USD,Credit Card
+2026-01-10,220.0,Travel,Weekend getaway hotel,USD,Credit Card
+2026-01-10,45.0,Food,Road trip snacks and meals,USD,Credit Card
+2026-01-11,18.0,Food,Lunch with colleagues,USD,Debit Card
+2026-01-11,12.5,Shopping,Phone case and charger,USD,Credit Card
+2026-01-12,85.0,Bills,Water and sewer bill,USD,Bank Transfer
+2026-01-12,28.0,Entertainment,Concert tickets,USD,Credit Card
+2026-01-13,12.75,Food,Morning coffee and bagel,USD,Cash
+2026-01-13,32.5,Transport,Uber ride to airport,USD,Credit Card
+2026-01-14,75.0,Shopping,Weekend shopping trip,USD,Credit Card
+2026-01-14,22.0,Food,Dinner at local bistro,USD,Debit Card
+2026-01-15,15.0,Transport,Parking garage fee,USD,Cash
+2026-01-15,18.5,Health,Vitamins and supplements,USD,Credit Card
+2026-01-16,40.0,Education,Textbook purchase,USD,Credit Card
+2026-01-16,25.0,Food,Groceries for the week,USD,Debit Card
+2026-01-17,12.0,Entertainment,Movie rental,USD,Debit Card
+2026-01-17,35.0,Food,Family dinner at restaurant,USD,Credit Card
+2026-01-18,95.0,Bills,Internet and cable bill,USD,Bank Transfer
+2026-01-18,18.75,Food,Lunch special,USD,Cash
+2026-01-19,28.0,Transport,Taxi ride home,USD,Credit Card
+2026-01-19,15.0,Shopping,Grocery store essentials,USD,Debit Card
+2026-01-20,42.0,Health,Doctor visit copay,USD,Credit Card
+2026-01-20,28.5,Food,Thursday lunch special,USD,Debit Card
+2026-01-21,12.0,Transport,Bus pass weekly,USD,Bank Transfer
+2026-01-21,55.0,Shopping,Home decor items,USD,Credit Card
+2026-01-22,18.0,Food,Lunch with client,USD,Credit Card
+2026-01-22,12.5,Shopping,Coffee maker replacement,USD,Debit Card
+2026-01-23,25.0,Entertainment,Comedy show tickets,USD,Credit Card
+2026-01-23,70.0,Bills,Rent payment,USD,Bank Transfer
+2026-01-24,33.0,Transport,Gas station fill-up,USD,Credit Card
+2026-01-24,10.5,Food,Morning coffee and muffin,USD,Cash
+2026-01-25,28.0,Food,Groceries for weekend,USD,Debit Card
+2026-01-25,45.0,Shopping,Weekend outfit,USD,Credit Card
+2026-01-26,15.0,Food,Lunch at work cafeteria,USD,Debit Card
+2026-01-26,20.0,Health,Athletic supplements,USD,Credit Card
+2026-01-27,18.5,Transport,Parking and tolls,USD,Cash
+2026-01-27,35.0,Food,Dinner with friends,USD,Credit Card
+2026-01-28,120.0,Travel,Business trip flight,USD,Credit Card
+2026-01-28,22.0,Food,Airport meals and snacks,USD,Debit Card
+2026-01-29,8.5,Shopping,Travel essentials,USD,Debit Card
+2026-01-29,40.0,Education,Workshop registration fee,USD,Credit Card
+2026-01-30,18.0,Food,Lunch with team,USD,Debit Card
+2026-01-30,15.5,Shopping,Phone accessories,USD,Credit Card
+2026-01-31,95.0,Bills,Monthly subscription services,USD,Bank Transfer
+2026-01-31,28.5,Food,Groceries for month end,USD,Debit Card

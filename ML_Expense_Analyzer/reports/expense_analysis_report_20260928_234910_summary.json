@@ -1,0 +1,52 @@
+{
+  "project_info": {
+    "name": "ML Expense Analyzer",
+    "version": "1.0.0",
+    "description": "Machine Learning project for personal expense analysis and prediction",
+    "generated_at": "2026-09-28T23:49:11.632041"
+  },
+  "data_summary": {
+    "total_records": 1000,
+    "date_range": {
+      "start": "2025-09-28T00:00:00",
+      "end": "2026-09-28T00:00:00"
+    },
+    "total_expenses": 189031.93,
+    "average_transaction": 189.03193,
+    "unique_categories": 9,
+    "features_original": 8,
+    "features_engineered": 2,
+    "features_total": 2
+  },
+  "model_performance": {
+    "clustering": {
+      "kmeans": {
+        "n_clusters": 5,
+        "n_noise_points": 0,
+        "silhouette_score": 0.4160378831859183
+      },
+      "dbscan": {
+        "n_clusters": 1,
+        "n_noise_points": 4,
+        "silhouette_score": null
+      }
+    },
+    "anomaly_detection": {
+      "isolation_forest": {
+        "anomaly_rate": 0.1,
+        "n_anomalies": "100"
+      },
+      "one_class_svm": {
+        "anomaly_rate": 0.099,
+        "n_anomalies": "99"
+      }
+    }
+  },
+  "recommendations": [
+    "Deploy categorization model for real-time expense tagging",
+    "Implement monthly spending forecasts",
+    "Set up anomaly alerts for unusual transactions",
+    "Integrate with banking APIs for automatic data feeds",
+    "Develop web dashboard for interactive visualization"
+  ]
+}

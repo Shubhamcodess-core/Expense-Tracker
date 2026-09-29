@@ -1,0 +1,606 @@
+2026-09-28 23:42:32,662 - __main__ - INFO - Starting ML Expense Analyzer Pipeline
+2026-09-28 23:42:32,665 - __main__ - INFO - Loaded configuration from config.yaml
+2026-09-28 23:42:32,666 - __main__ - INFO - Step 1: Data Preprocessing
+2026-09-28 23:42:32,666 - __main__ - INFO - Loading data from data/sample_expenses.csv
+2026-09-28 23:42:32,666 - data.preprocess - INFO - Loading data from data/sample_expenses.csv
+2026-09-28 23:42:32,668 - data.preprocess - INFO - Loaded 61 rows and 6 columns
+2026-09-28 23:42:32,668 - data.preprocess - INFO - Starting data preprocessing
+2026-09-28 23:42:32,672 - data.preprocess - INFO - Preprocessing completed. Final dataset: 61 rows
+2026-09-28 23:42:32,675 - data.preprocess - INFO - Saved processed data to data\processed\processed_expenses.csv
+2026-09-28 23:42:32,675 - __main__ - INFO - Data preprocessing completed
+2026-09-28 23:42:32,675 - __main__ - INFO - Step 2: Feature Engineering
+2026-09-28 23:42:32,675 - features.engineer - INFO - Starting feature engineering
+2026-09-28 23:42:32,676 - features.engineer - INFO - Extracting time-based features
+2026-09-28 23:42:32,680 - features.engineer - INFO - Extracting amount-based features
+2026-09-28 23:42:32,683 - features.engineer - INFO - Creating interaction features
+2026-09-28 23:42:32,683 - features.engineer - INFO - Feature engineering completed. Features: 2 columns
+2026-09-28 23:42:32,684 - features.engineer - INFO - Saved featured data to data\processed\featured_expenses.csv
+2026-09-28 23:42:32,684 - __main__ - INFO - Feature engineering completed
+2026-09-28 23:42:32,684 - __main__ - INFO - Step 3: Model Training
+2026-09-28 23:42:32,684 - models.trainer - INFO - Starting model training for all model types
+2026-09-28 23:42:32,684 - models.trainer - INFO - Preparing features and targets
+2026-09-28 23:42:32,685 - models.trainer - INFO - Prepared features: 2 columns, 61 samples
+2026-09-28 23:42:32,685 - models.trainer - INFO - Training clustering models
+2026-09-28 23:42:32,686 - models.trainer - INFO - Training clustering models
+2026-09-28 23:42:32,701 - models.trainer - INFO - Training kmeans...
+2026-09-28 23:42:32,754 - models.trainer - INFO - kmeans - Clusters: 5, Noise points: 0
+2026-09-28 23:42:32,754 - models.trainer - INFO - Training dbscan...
+2026-09-28 23:42:32,756 - models.trainer - INFO - dbscan - Clusters: 2, Noise points: 4
+2026-09-28 23:42:32,756 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:42:32,756 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:42:32,758 - models.trainer - INFO - Training isolation_forest...
+2026-09-28 23:42:32,890 - models.trainer - INFO - isolation_forest - Anomalies detected: 6 (9.84%)
+2026-09-28 23:42:32,890 - models.trainer - INFO - Training one_class_svm...
+2026-09-28 23:42:32,891 - models.trainer - INFO - one_class_svm - Anomalies detected: 5 (8.20%)
+2026-09-28 23:42:32,892 - models.trainer - INFO - Model training completed
+2026-09-28 23:42:32,892 - models.trainer - INFO - Saving models to models
+2026-09-28 23:42:32,893 - models.trainer - INFO - Saved clustering/kmeans to models\clustering_kmeans.joblib
+2026-09-28 23:42:32,893 - models.trainer - INFO - Saved clustering/dbscan to models\clustering_dbscan.joblib
+2026-09-28 23:42:32,913 - models.trainer - INFO - Saved anomaly_detection/isolation_forest to models\anomaly_detection_isolation_forest.joblib
+2026-09-28 23:42:32,914 - models.trainer - INFO - Saved anomaly_detection/one_class_svm to models\anomaly_detection_one_class_svm.joblib
+2026-09-28 23:42:32,915 - models.trainer - INFO - Saved model performance to models\model_performance.joblib
+2026-09-28 23:42:32,915 - __main__ - INFO - Model training completed
+2026-09-28 23:42:32,915 - __main__ - INFO - Step 4: Model Evaluation
+2026-09-28 23:42:32,915 - models.evaluator - INFO - Starting model evaluation
+2026-09-28 23:42:32,916 - models.evaluator - INFO - Evaluating clustering models
+2026-09-28 23:42:32,919 - models.evaluator - INFO - Evaluated kmeans: Clusters = 5
+2026-09-28 23:42:32,919 - models.evaluator - INFO - Evaluated dbscan: Clusters = 2
+2026-09-28 23:42:32,919 - models.evaluator - INFO - Evaluating anomaly detection models
+2026-09-28 23:42:32,924 - models.evaluator - INFO - Evaluated isolation_forest: Anomalies = 6 (9.84%)
+2026-09-28 23:42:32,925 - models.evaluator - INFO - Evaluated one_class_svm: Anomalies = 5 (8.20%)
+2026-09-28 23:42:32,925 - models.evaluator - INFO - Model evaluation completed
+2026-09-28 23:42:32,925 - models.evaluator - INFO - Saving evaluation results to reports
+2026-09-28 23:42:32,926 - models.evaluator - INFO - Saved evaluation results to reports\evaluation_results.joblib
+2026-09-28 23:42:32,926 - models.evaluator - INFO - Saved evaluation summary to reports\evaluation_summary.json
+2026-09-28 23:42:32,926 - __main__ - INFO - Model evaluation completed
+2026-09-28 23:42:32,926 - __main__ - INFO - Step 5: Report Generation
+2026-09-28 23:42:32,927 - reports.generator - INFO - Starting comprehensive report generation
+2026-09-28 23:42:34,851 - reports.generator - INFO - JSON summary saved to reports\expense_analysis_report_20260928_234232_summary.json
+2026-09-28 23:42:36,660 - reports.generator - INFO - Predictions saved to reports\predictions\expense_predictions_20260928_234232.json
+2026-09-28 23:42:36,660 - reports.generator - INFO - Comprehensive report generated: reports\expense_analysis_report_20260928_234232.pdf
+2026-09-28 23:42:36,660 - reports.generator - INFO - JSON summary generated: reports\expense_analysis_report_20260928_234232_summary.json
+2026-09-28 23:42:36,660 - reports.generator - INFO - Visualizations saved to: reports\plots
+2026-09-28 23:42:36,660 - reports.generator - INFO - Predictions saved to: reports\predictions
+2026-09-28 23:42:36,660 - __main__ - INFO - Report generation completed
+2026-09-28 23:42:36,660 - __main__ - INFO - ML Expense Analyzer Pipeline completed successfully!
+2026-09-28 23:46:49,520 - __main__ - INFO - Starting ML Expense Analyzer Pipeline
+2026-09-28 23:46:49,524 - __main__ - INFO - Loaded configuration from config.yaml
+2026-09-28 23:46:49,524 - __main__ - INFO - Step 1: Data Preprocessing
+2026-09-28 23:46:49,524 - __main__ - INFO - Loading data from data/sample_expenses.csv
+2026-09-28 23:46:49,525 - data.preprocess - INFO - Loading data from data/sample_expenses.csv
+2026-09-28 23:46:49,535 - data.preprocess - INFO - Loaded 61 rows and 6 columns
+2026-09-28 23:46:49,537 - data.preprocess - INFO - Starting data preprocessing
+2026-09-28 23:46:49,553 - data.preprocess - INFO - Preprocessing completed. Final dataset: 61 rows
+2026-09-28 23:46:49,557 - data.preprocess - INFO - Saved processed data to data\processed\processed_expenses.csv
+2026-09-28 23:46:49,557 - __main__ - INFO - Data preprocessing completed
+2026-09-28 23:46:49,557 - __main__ - INFO - Step 2: Feature Engineering
+2026-09-28 23:46:49,557 - features.engineer - INFO - Starting feature engineering
+2026-09-28 23:46:49,557 - features.engineer - INFO - Extracting time-based features
+2026-09-28 23:46:49,562 - features.engineer - INFO - Extracting amount-based features
+2026-09-28 23:46:49,567 - features.engineer - INFO - Creating interaction features
+2026-09-28 23:46:49,568 - features.engineer - INFO - Feature engineering completed. Features: 2 columns
+2026-09-28 23:46:49,568 - features.engineer - INFO - Saved featured data to data\processed\featured_expenses.csv
+2026-09-28 23:46:49,569 - __main__ - INFO - Feature engineering completed
+2026-09-28 23:46:49,569 - __main__ - INFO - Step 3: Model Training
+2026-09-28 23:46:49,569 - models.trainer - INFO - Starting model training for all model types
+2026-09-28 23:46:49,569 - models.trainer - INFO - Preparing features and targets
+2026-09-28 23:46:49,570 - models.trainer - INFO - Prepared features: 2 columns, 61 samples
+2026-09-28 23:46:49,570 - models.trainer - INFO - Training clustering models
+2026-09-28 23:46:49,570 - models.trainer - INFO - Training clustering models
+2026-09-28 23:46:49,586 - models.trainer - INFO - Training kmeans...
+2026-09-28 23:46:49,649 - models.trainer - INFO - kmeans - Clusters: 5, Noise points: 0
+2026-09-28 23:46:49,649 - models.trainer - INFO - Training dbscan...
+2026-09-28 23:46:49,655 - models.trainer - INFO - dbscan - Clusters: 2, Noise points: 4
+2026-09-28 23:46:49,656 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:46:49,656 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:46:49,658 - models.trainer - INFO - Training isolation_forest...
+2026-09-28 23:46:49,797 - models.trainer - INFO - isolation_forest - Anomalies detected: 6 (9.84%)
+2026-09-28 23:46:49,797 - models.trainer - INFO - Training one_class_svm...
+2026-09-28 23:46:49,799 - models.trainer - INFO - one_class_svm - Anomalies detected: 5 (8.20%)
+2026-09-28 23:46:49,800 - models.trainer - INFO - Model training completed
+2026-09-28 23:46:49,800 - models.trainer - INFO - Saving models to models
+2026-09-28 23:46:49,801 - models.trainer - INFO - Saved clustering/kmeans to models\clustering_kmeans.joblib
+2026-09-28 23:46:49,802 - models.trainer - INFO - Saved clustering/dbscan to models\clustering_dbscan.joblib
+2026-09-28 23:46:49,821 - models.trainer - INFO - Saved anomaly_detection/isolation_forest to models\anomaly_detection_isolation_forest.joblib
+2026-09-28 23:46:49,823 - models.trainer - INFO - Saved anomaly_detection/one_class_svm to models\anomaly_detection_one_class_svm.joblib
+2026-09-28 23:46:49,823 - models.trainer - INFO - Saved model performance to models\model_performance.joblib
+2026-09-28 23:46:49,824 - __main__ - INFO - Model training completed
+2026-09-28 23:46:49,824 - __main__ - INFO - Step 4: Model Evaluation
+2026-09-28 23:46:49,824 - models.evaluator - INFO - Starting model evaluation
+2026-09-28 23:46:49,825 - models.evaluator - INFO - Evaluating clustering models
+2026-09-28 23:46:49,831 - models.evaluator - INFO - Evaluated kmeans: Clusters = 5
+2026-09-28 23:46:49,831 - models.evaluator - INFO - Evaluated dbscan: Clusters = 2
+2026-09-28 23:46:49,831 - models.evaluator - INFO - Evaluating anomaly detection models
+2026-09-28 23:46:49,836 - models.evaluator - INFO - Evaluated isolation_forest: Anomalies = 6 (9.84%)
+2026-09-28 23:46:49,836 - models.evaluator - INFO - Evaluated one_class_svm: Anomalies = 5 (8.20%)
+2026-09-28 23:46:49,836 - models.evaluator - INFO - Model evaluation completed
+2026-09-28 23:46:49,836 - models.evaluator - INFO - Saving evaluation results to reports
+2026-09-28 23:46:49,837 - models.evaluator - INFO - Saved evaluation results to reports\evaluation_results.joblib
+2026-09-28 23:46:49,837 - models.evaluator - INFO - Saved evaluation summary to reports\evaluation_summary.json
+2026-09-28 23:46:49,838 - __main__ - INFO - Model evaluation completed
+2026-09-28 23:46:49,838 - __main__ - INFO - Step 5: Report Generation
+2026-09-28 23:46:49,838 - reports.generator - INFO - Starting comprehensive report generation
+2026-09-28 23:46:51,376 - reports.generator - INFO - JSON summary saved to reports\expense_analysis_report_20260928_234649_summary.json
+2026-09-28 23:46:53,325 - reports.generator - INFO - Predictions saved to reports\predictions\expense_predictions_20260928_234649.json
+2026-09-28 23:46:53,326 - reports.generator - INFO - Comprehensive report generated: reports\expense_analysis_report_20260928_234649.pdf
+2026-09-28 23:46:53,326 - reports.generator - INFO - JSON summary generated: reports\expense_analysis_report_20260928_234649_summary.json
+2026-09-28 23:46:53,326 - reports.generator - INFO - Visualizations saved to: reports\plots
+2026-09-28 23:46:53,326 - reports.generator - INFO - Predictions saved to: reports\predictions
+2026-09-28 23:46:53,326 - __main__ - INFO - Report generation completed
+2026-09-28 23:46:53,326 - __main__ - INFO - ML Expense Analyzer Pipeline completed successfully!
+2026-09-28 23:47:07,946 - __main__ - INFO - Starting ML Expense Analyzer Pipeline
+2026-09-28 23:47:07,949 - __main__ - INFO - Loaded configuration from config.yaml
+2026-09-28 23:47:07,950 - __main__ - INFO - Step 1: Data Preprocessing
+2026-09-28 23:47:07,951 - __main__ - INFO - Generating sample expense data for demonstration
+2026-09-28 23:47:07,951 - data.preprocess - INFO - Generating 1000 sample expense records
+2026-09-28 23:47:07,953 - __main__ - ERROR - Pipeline failed with error: module 'numpy.random' has no attribute 'descriptions'
+Traceback (most recent call last):
+  File "D:\Project\ML_Expense_Analyzer\main.py", line 103, in main
+    raw_data = preprocessor.generate_sample_data()
+  File "D:\Project\ML_Expense_Analyzer\src\data\preprocess.py", line 92, in generate_sample_data
+    description = np.random.descriptions[category]
+                  ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'numpy.random' has no attribute 'descriptions'
+2026-09-28 23:48:11,725 - __main__ - INFO - Starting ML Expense Analyzer Pipeline
+2026-09-28 23:48:11,733 - __main__ - INFO - Loaded configuration from config.yaml
+2026-09-28 23:48:11,734 - __main__ - INFO - Step 1: Data Preprocessing
+2026-09-28 23:48:11,734 - __main__ - INFO - Generating sample expense data for demonstration
+2026-09-28 23:48:11,734 - data.preprocess - INFO - Generating 1000 sample expense records
+2026-09-28 23:48:11,744 - __main__ - ERROR - Pipeline failed with error: 'numpy.datetime64' object has no attribute 'strftime'
+Traceback (most recent call last):
+  File "D:\Project\ML_Expense_Analyzer\main.py", line 103, in main
+    raw_data = preprocessor.generate_sample_data()
+  File "D:\Project\ML_Expense_Analyzer\src\data\preprocess.py", line 93, in generate_sample_data
+    'date': np.random.choice(dates).strftime('%Y-%m-%d'),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'numpy.datetime64' object has no attribute 'strftime'
+2026-09-28 23:48:31,959 - __main__ - INFO - Starting ML Expense Analyzer Pipeline
+2026-09-28 23:48:31,965 - __main__ - INFO - Loaded configuration from config.yaml
+2026-09-28 23:48:31,965 - __main__ - INFO - Step 1: Data Preprocessing
+2026-09-28 23:48:31,965 - __main__ - INFO - Generating sample expense data for demonstration
+2026-09-28 23:48:31,965 - data.preprocess - INFO - Generating 1000 sample expense records
+2026-09-28 23:48:32,025 - data.preprocess - INFO - Generated sample data with 1000 records
+2026-09-28 23:48:32,025 - data.preprocess - INFO - Starting data preprocessing
+2026-09-28 23:48:32,044 - data.preprocess - INFO - Preprocessing completed. Final dataset: 1000 rows
+2026-09-28 23:48:32,050 - data.preprocess - INFO - Saved processed data to data\processed\processed_expenses.csv
+2026-09-28 23:48:32,050 - __main__ - INFO - Data preprocessing completed
+2026-09-28 23:48:32,050 - __main__ - INFO - Step 2: Feature Engineering
+2026-09-28 23:48:32,050 - features.engineer - INFO - Starting feature engineering
+2026-09-28 23:48:32,050 - features.engineer - INFO - Extracting time-based features
+2026-09-28 23:48:32,056 - features.engineer - INFO - Extracting amount-based features
+2026-09-28 23:48:32,062 - features.engineer - INFO - Creating interaction features
+2026-09-28 23:48:32,062 - features.engineer - INFO - Feature engineering completed. Features: 2 columns
+2026-09-28 23:48:32,064 - features.engineer - INFO - Saved featured data to data\processed\featured_expenses.csv
+2026-09-28 23:48:32,064 - __main__ - INFO - Feature engineering completed
+2026-09-28 23:48:32,064 - __main__ - INFO - Step 3: Model Training
+2026-09-28 23:48:32,065 - models.trainer - INFO - Starting model training for all model types
+2026-09-28 23:48:32,065 - models.trainer - INFO - Preparing features and targets
+2026-09-28 23:48:32,066 - models.trainer - INFO - Prepared features: 2 columns, 1000 samples
+2026-09-28 23:48:32,066 - models.trainer - INFO - Training clustering models
+2026-09-28 23:48:32,066 - models.trainer - INFO - Training clustering models
+2026-09-28 23:48:32,085 - models.trainer - INFO - Training kmeans...
+2026-09-28 23:48:32,170 - models.trainer - INFO - kmeans - Clusters: 5, Noise points: 0
+2026-09-28 23:48:32,170 - models.trainer - INFO - Training dbscan...
+2026-09-28 23:48:32,182 - models.trainer - INFO - dbscan - Clusters: 1, Noise points: 4
+2026-09-28 23:48:32,182 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:48:32,182 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:48:32,184 - models.trainer - INFO - Training isolation_forest...
+2026-09-28 23:48:32,339 - models.trainer - INFO - isolation_forest - Anomalies detected: 100 (10.00%)
+2026-09-28 23:48:32,339 - models.trainer - INFO - Training one_class_svm...
+2026-09-28 23:48:32,348 - models.trainer - INFO - one_class_svm - Anomalies detected: 99 (9.90%)
+2026-09-28 23:48:32,348 - models.trainer - INFO - Model training completed
+2026-09-28 23:48:32,348 - models.trainer - INFO - Saving models to models
+2026-09-28 23:48:32,350 - models.trainer - INFO - Saved clustering/kmeans to models\clustering_kmeans.joblib
+2026-09-28 23:48:32,351 - models.trainer - INFO - Saved clustering/dbscan to models\clustering_dbscan.joblib
+2026-09-28 23:48:32,370 - models.trainer - INFO - Saved anomaly_detection/isolation_forest to models\anomaly_detection_isolation_forest.joblib
+2026-09-28 23:48:32,371 - models.trainer - INFO - Saved anomaly_detection/one_class_svm to models\anomaly_detection_one_class_svm.joblib
+2026-09-28 23:48:32,371 - models.trainer - INFO - Saved model performance to models\model_performance.joblib
+2026-09-28 23:48:32,371 - __main__ - INFO - Model training completed
+2026-09-28 23:48:32,371 - __main__ - INFO - Step 4: Model Evaluation
+2026-09-28 23:48:32,371 - models.evaluator - INFO - Starting model evaluation
+2026-09-28 23:48:32,372 - models.evaluator - INFO - Evaluating clustering models
+2026-09-28 23:48:32,408 - models.evaluator - INFO - Evaluated kmeans: Clusters = 5
+2026-09-28 23:48:32,408 - models.evaluator - INFO - Evaluated dbscan: Clusters = 1
+2026-09-28 23:48:32,408 - models.evaluator - INFO - Evaluating anomaly detection models
+2026-09-28 23:48:32,422 - models.evaluator - INFO - Evaluated isolation_forest: Anomalies = 100 (10.00%)
+2026-09-28 23:48:32,429 - models.evaluator - INFO - Evaluated one_class_svm: Anomalies = 99 (9.90%)
+2026-09-28 23:48:32,429 - models.evaluator - INFO - Model evaluation completed
+2026-09-28 23:48:32,430 - models.evaluator - INFO - Saving evaluation results to reports
+2026-09-28 23:48:32,435 - models.evaluator - INFO - Saved evaluation results to reports\evaluation_results.joblib
+2026-09-28 23:48:32,435 - models.evaluator - INFO - Saved evaluation summary to reports\evaluation_summary.json
+2026-09-28 23:48:32,435 - __main__ - INFO - Model evaluation completed
+2026-09-28 23:48:32,435 - __main__ - INFO - Step 5: Report Generation
+2026-09-28 23:48:32,436 - reports.generator - INFO - Starting comprehensive report generation
+2026-09-28 23:48:34,688 - reports.generator - INFO - JSON summary saved to reports\expense_analysis_report_20260928_234832_summary.json
+2026-09-28 23:48:37,701 - reports.generator - INFO - Predictions saved to reports\predictions\expense_predictions_20260928_234832.json
+2026-09-28 23:48:37,701 - reports.generator - INFO - Comprehensive report generated: reports\expense_analysis_report_20260928_234832.pdf
+2026-09-28 23:48:37,701 - reports.generator - INFO - JSON summary generated: reports\expense_analysis_report_20260928_234832_summary.json
+2026-09-28 23:48:37,701 - reports.generator - INFO - Visualizations saved to: reports\plots
+2026-09-28 23:48:37,701 - reports.generator - INFO - Predictions saved to: reports\predictions
+2026-09-28 23:48:37,701 - __main__ - INFO - Report generation completed
+2026-09-28 23:48:37,701 - __main__ - INFO - ML Expense Analyzer Pipeline completed successfully!
+2026-09-28 23:49:09,822 - __main__ - INFO - Starting ML Expense Analyzer Pipeline
+2026-09-28 23:49:09,826 - __main__ - INFO - Loaded configuration from config.yaml
+2026-09-28 23:49:09,826 - __main__ - INFO - Step 1: Data Preprocessing
+2026-09-28 23:49:09,826 - __main__ - INFO - Generating sample expense data for demonstration
+2026-09-28 23:49:09,826 - data.preprocess - INFO - Generating 1000 sample expense records
+2026-09-28 23:49:09,873 - data.preprocess - INFO - Generated sample data with 1000 records
+2026-09-28 23:49:09,873 - data.preprocess - INFO - Starting data preprocessing
+2026-09-28 23:49:09,879 - data.preprocess - INFO - Preprocessing completed. Final dataset: 1000 rows
+2026-09-28 23:49:09,883 - data.preprocess - INFO - Saved processed data to data\processed\processed_expenses.csv
+2026-09-28 23:49:09,883 - __main__ - INFO - Data preprocessing completed
+2026-09-28 23:49:09,883 - __main__ - INFO - Step 2: Feature Engineering
+2026-09-28 23:49:09,883 - features.engineer - INFO - Starting feature engineering
+2026-09-28 23:49:09,883 - features.engineer - INFO - Extracting time-based features
+2026-09-28 23:49:09,886 - features.engineer - INFO - Extracting amount-based features
+2026-09-28 23:49:09,890 - features.engineer - INFO - Creating interaction features
+2026-09-28 23:49:09,890 - features.engineer - INFO - Feature engineering completed. Features: 2 columns
+2026-09-28 23:49:09,892 - features.engineer - INFO - Saved featured data to data\processed\featured_expenses.csv
+2026-09-28 23:49:09,892 - __main__ - INFO - Feature engineering completed
+2026-09-28 23:49:09,892 - __main__ - INFO - Step 3: Model Training
+2026-09-28 23:49:09,892 - models.trainer - INFO - Starting model training for all model types
+2026-09-28 23:49:09,892 - models.trainer - INFO - Preparing features and targets
+2026-09-28 23:49:09,893 - models.trainer - INFO - Prepared features: 2 columns, 1000 samples
+2026-09-28 23:49:09,893 - models.trainer - INFO - Training clustering models
+2026-09-28 23:49:09,893 - models.trainer - INFO - Training clustering models
+2026-09-28 23:49:09,906 - models.trainer - INFO - Training kmeans...
+2026-09-28 23:49:09,973 - models.trainer - INFO - kmeans - Clusters: 5, Noise points: 0
+2026-09-28 23:49:09,973 - models.trainer - INFO - Training dbscan...
+2026-09-28 23:49:09,981 - models.trainer - INFO - dbscan - Clusters: 1, Noise points: 4
+2026-09-28 23:49:09,981 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:49:09,982 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:49:09,984 - models.trainer - INFO - Training isolation_forest...
+2026-09-28 23:49:10,126 - models.trainer - INFO - isolation_forest - Anomalies detected: 100 (10.00%)
+2026-09-28 23:49:10,127 - models.trainer - INFO - Training one_class_svm...
+2026-09-28 23:49:10,134 - models.trainer - INFO - one_class_svm - Anomalies detected: 99 (9.90%)
+2026-09-28 23:49:10,134 - models.trainer - INFO - Model training completed
+2026-09-28 23:49:10,135 - models.trainer - INFO - Saving models to models
+2026-09-28 23:49:10,136 - models.trainer - INFO - Saved clustering/kmeans to models\clustering_kmeans.joblib
+2026-09-28 23:49:10,137 - models.trainer - INFO - Saved clustering/dbscan to models\clustering_dbscan.joblib
+2026-09-28 23:49:10,154 - models.trainer - INFO - Saved anomaly_detection/isolation_forest to models\anomaly_detection_isolation_forest.joblib
+2026-09-28 23:49:10,156 - models.trainer - INFO - Saved anomaly_detection/one_class_svm to models\anomaly_detection_one_class_svm.joblib
+2026-09-28 23:49:10,156 - models.trainer - INFO - Saved model performance to models\model_performance.joblib
+2026-09-28 23:49:10,156 - __main__ - INFO - Model training completed
+2026-09-28 23:49:10,156 - __main__ - INFO - Step 4: Model Evaluation
+2026-09-28 23:49:10,156 - models.evaluator - INFO - Starting model evaluation
+2026-09-28 23:49:10,157 - models.evaluator - INFO - Evaluating clustering models
+2026-09-28 23:49:10,171 - models.evaluator - INFO - Evaluated kmeans: Clusters = 5
+2026-09-28 23:49:10,171 - models.evaluator - INFO - Evaluated dbscan: Clusters = 1
+2026-09-28 23:49:10,172 - models.evaluator - INFO - Evaluating anomaly detection models
+2026-09-28 23:49:10,180 - models.evaluator - INFO - Evaluated isolation_forest: Anomalies = 100 (10.00%)
+2026-09-28 23:49:10,184 - models.evaluator - INFO - Evaluated one_class_svm: Anomalies = 99 (9.90%)
+2026-09-28 23:49:10,185 - models.evaluator - INFO - Model evaluation completed
+2026-09-28 23:49:10,185 - models.evaluator - INFO - Saving evaluation results to reports
+2026-09-28 23:49:10,189 - models.evaluator - INFO - Saved evaluation results to reports\evaluation_results.joblib
+2026-09-28 23:49:10,189 - models.evaluator - INFO - Saved evaluation summary to reports\evaluation_summary.json
+2026-09-28 23:49:10,189 - __main__ - INFO - Model evaluation completed
+2026-09-28 23:49:10,190 - __main__ - INFO - Step 5: Report Generation
+2026-09-28 23:49:10,190 - reports.generator - INFO - Starting comprehensive report generation
+2026-09-28 23:49:11,632 - reports.generator - INFO - JSON summary saved to reports\expense_analysis_report_20260928_234910_summary.json
+2026-09-28 23:49:13,514 - reports.generator - INFO - Predictions saved to reports\predictions\expense_predictions_20260928_234910.json
+2026-09-28 23:49:13,514 - reports.generator - INFO - Comprehensive report generated: reports\expense_analysis_report_20260928_234910.pdf
+2026-09-28 23:49:13,515 - reports.generator - INFO - JSON summary generated: reports\expense_analysis_report_20260928_234910_summary.json
+2026-09-28 23:49:13,515 - reports.generator - INFO - Visualizations saved to: reports\plots
+2026-09-28 23:49:13,515 - reports.generator - INFO - Predictions saved to: reports\predictions
+2026-09-28 23:49:13,515 - __main__ - INFO - Report generation completed
+2026-09-28 23:49:13,515 - __main__ - INFO - ML Expense Analyzer Pipeline completed successfully!
+2026-09-28 23:51:50,224 - __main__ - INFO - Starting ML Expense Analyzer Pipeline
+2026-09-28 23:51:50,228 - __main__ - INFO - Loaded configuration from config.yaml
+2026-09-28 23:51:50,228 - __main__ - INFO - Step 1: Data Preprocessing
+2026-09-28 23:51:50,228 - __main__ - INFO - Generating sample expense data for demonstration
+2026-09-28 23:51:50,228 - data.preprocess - INFO - Generating 1000 sample expense records
+2026-09-28 23:51:50,285 - data.preprocess - INFO - Generated sample data with 1000 records
+2026-09-28 23:51:50,285 - data.preprocess - INFO - Starting data preprocessing
+2026-09-28 23:51:50,291 - data.preprocess - INFO - Preprocessing completed. Final dataset: 1000 rows
+2026-09-28 23:51:50,297 - data.preprocess - INFO - Saved processed data to data\processed\processed_expenses.csv
+2026-09-28 23:51:50,297 - __main__ - INFO - Data preprocessing completed
+2026-09-28 23:51:50,297 - __main__ - INFO - Step 2: Feature Engineering
+2026-09-28 23:51:50,297 - features.engineer - INFO - Starting feature engineering
+2026-09-28 23:51:50,297 - features.engineer - INFO - Extracting time-based features
+2026-09-28 23:51:50,302 - features.engineer - INFO - Extracting amount-based features
+2026-09-28 23:51:50,305 - features.engineer - INFO - Extracting text-based features
+2026-09-28 23:51:50,319 - features.engineer - INFO - Added 66 TF-IDF features
+2026-09-28 23:51:50,319 - features.engineer - INFO - Encoding categorical feature: category
+2026-09-28 23:51:50,338 - features.engineer - INFO - Added 8 one-hot encoded features for category
+2026-09-28 23:51:50,338 - features.engineer - INFO - Encoding categorical feature: currency
+2026-09-28 23:51:50,340 - features.engineer - INFO - Added 0 one-hot encoded features for currency
+2026-09-28 23:51:50,340 - features.engineer - INFO - Encoding categorical feature: payment_method
+2026-09-28 23:51:50,342 - features.engineer - INFO - Added 3 one-hot encoded features for payment_method
+2026-09-28 23:51:50,342 - features.engineer - INFO - Creating interaction features
+2026-09-28 23:51:50,343 - features.engineer - INFO - Feature engineering completed. Features: 115 columns
+2026-09-28 23:51:50,384 - features.engineer - INFO - Saved featured data to data\processed\featured_expenses.csv
+2026-09-28 23:51:50,384 - __main__ - INFO - Feature engineering completed
+2026-09-28 23:51:50,384 - __main__ - INFO - Step 3: Model Training
+2026-09-28 23:51:50,384 - models.trainer - INFO - Starting model training for all model types
+2026-09-28 23:51:50,384 - models.trainer - INFO - Preparing features and targets
+2026-09-28 23:51:50,396 - models.trainer - INFO - Prepared features: 111 columns, 1000 samples
+2026-09-28 23:51:50,396 - models.trainer - INFO - Classification target: 9 classes
+2026-09-28 23:51:50,396 - models.trainer - INFO - Regression target: amount
+2026-09-28 23:51:50,396 - models.trainer - INFO - Training classification models
+2026-09-28 23:51:50,396 - models.trainer - INFO - Training classification models
+2026-09-28 23:51:50,403 - __main__ - ERROR - Pipeline failed with error: could not convert string to float: 'USD'
+Traceback (most recent call last):
+  File "D:\Project\ML_Expense_Analyzer\main.py", line 125, in main
+    trained_models = trainer.train_all_models(featured_data)
+  File "D:\Project\ML_Expense_Analyzer\src\models\trainer.py", line 51, in train_all_models
+    self.trained_models['classification'] = self._train_classification_models(X, y_classification)
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project\ML_Expense_Analyzer\src\models\trainer.py", line 132, in _train_classification_models
+    X_train_scaled = scaler.fit_transform(X_train)
+  File "D:\Project\ML_Expense_Analyzer\.venv\Lib\site-packages\sklearn\utils\_set_output.py", line 327, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+  File "D:\Project\ML_Expense_Analyzer\.venv\Lib\site-packages\sklearn\base.py", line 969, in fit_transform
+    return self.fit(X, **fit_params).transform(X)
+           ~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Project\ML_Expense_Analyzer\.venv\Lib\site-packages\sklearn\preprocessing\_data.py", line 928, in fit
+    return self.partial_fit(X, y, sample_weight)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project\ML_Expense_Analyzer\.venv\Lib\site-packages\sklearn\base.py", line 1403, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+  File "D:\Project\ML_Expense_Analyzer\.venv\Lib\site-packages\sklearn\preprocessing\_data.py", line 965, in partial_fit
+    X = validate_data(
+        self,
+    ...<4 lines>...
+        reset=first_call,
+    )
+  File "D:\Project\ML_Expense_Analyzer\.venv\Lib\site-packages\sklearn\utils\validation.py", line 3041, in validate_data
+    out = check_array(X, input_name="X", **check_params)
+  File "D:\Project\ML_Expense_Analyzer\.venv\Lib\site-packages\sklearn\utils\validation.py", line 1038, in check_array
+    array = _asarray_with_order(array, order=order, dtype=dtype, xp=xp)
+  File "D:\Project\ML_Expense_Analyzer\.venv\Lib\site-packages\sklearn\utils\_array_api.py", line 983, in _asarray_with_order
+    array = numpy.asarray(array, order=order, dtype=dtype)
+  File "D:\Project\ML_Expense_Analyzer\.venv\Lib\site-packages\pandas\core\generic.py", line 2027, in __array__
+    arr = np.asarray(values, dtype=dtype)
+ValueError: could not convert string to float: 'USD'
+2026-09-28 23:53:59,960 - __main__ - INFO - Starting ML Expense Analyzer Pipeline
+2026-09-28 23:53:59,963 - __main__ - INFO - Loaded configuration from config.yaml
+2026-09-28 23:53:59,964 - __main__ - INFO - Step 1: Data Preprocessing
+2026-09-28 23:53:59,964 - __main__ - INFO - Generating sample expense data for demonstration
+2026-09-28 23:53:59,964 - data.preprocess - INFO - Generating 1000 sample expense records
+2026-09-28 23:54:00,021 - data.preprocess - INFO - Generated sample data with 1000 records
+2026-09-28 23:54:00,022 - data.preprocess - INFO - Starting data preprocessing
+2026-09-28 23:54:00,029 - data.preprocess - INFO - Preprocessing completed. Final dataset: 1000 rows
+2026-09-28 23:54:00,033 - data.preprocess - INFO - Saved processed data to data\processed\processed_expenses.csv
+2026-09-28 23:54:00,033 - __main__ - INFO - Data preprocessing completed
+2026-09-28 23:54:00,033 - __main__ - INFO - Step 2: Feature Engineering
+2026-09-28 23:54:00,033 - features.engineer - INFO - Starting feature engineering
+2026-09-28 23:54:00,033 - features.engineer - INFO - Extracting time-based features
+2026-09-28 23:54:00,038 - features.engineer - INFO - Extracting amount-based features
+2026-09-28 23:54:00,040 - features.engineer - INFO - Extracting text-based features
+2026-09-28 23:54:00,051 - features.engineer - INFO - Added 66 TF-IDF features
+2026-09-28 23:54:00,051 - features.engineer - INFO - Encoding categorical feature: category
+2026-09-28 23:54:00,067 - features.engineer - INFO - Added 8 one-hot encoded features for category
+2026-09-28 23:54:00,068 - features.engineer - INFO - Encoding categorical feature: currency
+2026-09-28 23:54:00,070 - features.engineer - INFO - Added 0 one-hot encoded features for currency
+2026-09-28 23:54:00,070 - features.engineer - INFO - Encoding categorical feature: payment_method
+2026-09-28 23:54:00,072 - features.engineer - INFO - Added 3 one-hot encoded features for payment_method
+2026-09-28 23:54:00,072 - features.engineer - INFO - Creating interaction features
+2026-09-28 23:54:00,073 - features.engineer - INFO - Feature engineering completed. Features: 115 columns
+2026-09-28 23:54:00,139 - features.engineer - INFO - Saved featured data to data\processed\featured_expenses.csv
+2026-09-28 23:54:00,139 - __main__ - INFO - Feature engineering completed
+2026-09-28 23:54:00,139 - __main__ - INFO - Step 3: Model Training
+2026-09-28 23:54:00,139 - models.trainer - INFO - Starting model training for all model types
+2026-09-28 23:54:00,139 - models.trainer - INFO - Preparing features and targets
+2026-09-28 23:54:00,149 - models.trainer - INFO - Prepared features: 95 columns, 1000 samples
+2026-09-28 23:54:00,149 - models.trainer - INFO - Classification target: 9 classes
+2026-09-28 23:54:00,149 - models.trainer - INFO - Regression target: amount
+2026-09-28 23:54:00,150 - models.trainer - INFO - Training classification models
+2026-09-28 23:54:00,150 - models.trainer - INFO - Training classification models
+2026-09-28 23:54:00,159 - models.trainer - INFO - Training random_forest...
+2026-09-28 23:54:00,378 - models.trainer - INFO - random_forest - Accuracy: 0.9700
+2026-09-28 23:54:00,378 - models.trainer - INFO - Training xgboost...
+2026-09-28 23:54:00,861 - models.trainer - INFO - xgboost - Accuracy: 0.9750
+2026-09-28 23:54:00,862 - models.trainer - INFO - Training lightgbm...
+2026-09-28 23:54:01,347 - models.trainer - INFO - lightgbm - Accuracy: 0.7000
+2026-09-28 23:54:01,347 - models.trainer - INFO - Training svm...
+2026-09-28 23:54:01,833 - models.trainer - INFO - svm - Accuracy: 0.9650
+2026-09-28 23:54:01,833 - models.trainer - INFO - Training neural_network...
+2026-09-28 23:54:03,159 - models.trainer - INFO - neural_network - Accuracy: 0.9550
+2026-09-28 23:54:03,159 - models.trainer - INFO - Training regression models
+2026-09-28 23:54:03,160 - models.trainer - INFO - Training regression models
+2026-09-28 23:54:03,173 - models.trainer - INFO - Training linear_regression...
+2026-09-28 23:54:03,187 - models.trainer - INFO - linear_regression - R²: 0.5646
+2026-09-28 23:54:03,187 - models.trainer - INFO - Training ridge...
+2026-09-28 23:54:03,191 - models.trainer - INFO - ridge - R²: 0.5646
+2026-09-28 23:54:03,192 - models.trainer - INFO - Training lasso...
+2026-09-28 23:54:03,205 - models.trainer - INFO - lasso - R²: 0.5657
+2026-09-28 23:54:03,205 - models.trainer - INFO - Training gradient_boosting...
+2026-09-28 23:54:03,438 - models.trainer - INFO - gradient_boosting - R²: 0.5696
+2026-09-28 23:54:03,438 - models.trainer - INFO - Training xgboost_regressor...
+2026-09-28 23:54:03,636 - models.trainer - INFO - xgboost_regressor - R²: 0.4725
+2026-09-28 23:54:03,637 - models.trainer - INFO - Training clustering models
+2026-09-28 23:54:03,637 - models.trainer - INFO - Training clustering models
+2026-09-28 23:54:03,644 - models.trainer - INFO - Training kmeans...
+2026-09-28 23:54:03,753 - models.trainer - INFO - kmeans - Clusters: 5, Noise points: 0
+2026-09-28 23:54:03,754 - models.trainer - INFO - Training dbscan...
+2026-09-28 23:54:03,767 - models.trainer - INFO - dbscan - Clusters: 0, Noise points: 1000
+2026-09-28 23:54:03,767 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:54:03,767 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:54:03,771 - models.trainer - INFO - Training isolation_forest...
+2026-09-28 23:54:03,944 - models.trainer - INFO - isolation_forest - Anomalies detected: 100 (10.00%)
+2026-09-28 23:54:03,944 - models.trainer - INFO - Training one_class_svm...
+2026-09-28 23:54:03,970 - models.trainer - INFO - one_class_svm - Anomalies detected: 111 (11.10%)
+2026-09-28 23:54:03,970 - models.trainer - INFO - Model training completed
+2026-09-28 23:54:03,970 - models.trainer - INFO - Saving models to models
+2026-09-28 23:54:03,990 - models.trainer - INFO - Saved classification/random_forest to models\classification_random_forest.joblib
+2026-09-28 23:54:04,001 - models.trainer - INFO - Saved classification/xgboost to models\classification_xgboost.joblib
+2026-09-28 23:54:04,053 - models.trainer - INFO - Saved classification/lightgbm to models\classification_lightgbm.joblib
+2026-09-28 23:54:04,056 - models.trainer - INFO - Saved classification/svm to models\classification_svm.joblib
+2026-09-28 23:54:04,061 - models.trainer - INFO - Saved classification/neural_network to models\classification_neural_network.joblib
+2026-09-28 23:54:04,062 - models.trainer - INFO - Saved regression/linear_regression to models\regression_linear_regression.joblib
+2026-09-28 23:54:04,064 - models.trainer - INFO - Saved regression/ridge to models\regression_ridge.joblib
+2026-09-28 23:54:04,065 - models.trainer - INFO - Saved regression/lasso to models\regression_lasso.joblib
+2026-09-28 23:54:04,068 - models.trainer - INFO - Saved regression/gradient_boosting to models\regression_gradient_boosting.joblib
+2026-09-28 23:54:04,075 - models.trainer - INFO - Saved regression/xgboost_regressor to models\regression_xgboost_regressor.joblib
+2026-09-28 23:54:04,077 - models.trainer - INFO - Saved clustering/kmeans to models\clustering_kmeans.joblib
+2026-09-28 23:54:04,079 - models.trainer - INFO - Saved clustering/dbscan to models\clustering_dbscan.joblib
+2026-09-28 23:54:04,122 - models.trainer - INFO - Saved anomaly_detection/isolation_forest to models\anomaly_detection_isolation_forest.joblib
+2026-09-28 23:54:04,125 - models.trainer - INFO - Saved anomaly_detection/one_class_svm to models\anomaly_detection_one_class_svm.joblib
+2026-09-28 23:54:04,126 - models.trainer - INFO - Saved model performance to models\model_performance.joblib
+2026-09-28 23:54:04,126 - __main__ - INFO - Model training completed
+2026-09-28 23:54:04,126 - __main__ - INFO - Step 4: Model Evaluation
+2026-09-28 23:54:04,126 - models.evaluator - INFO - Starting model evaluation
+2026-09-28 23:54:04,130 - models.evaluator - INFO - Evaluating classification models
+2026-09-28 23:54:04,286 - models.evaluator - INFO - Evaluated random_forest: Accuracy = 0.9700
+2026-09-28 23:54:04,342 - models.evaluator - INFO - Evaluated xgboost: Accuracy = 0.9750
+2026-09-28 23:54:04,384 - models.evaluator - INFO - Evaluated lightgbm: Accuracy = 0.7000
+2026-09-28 23:54:04,438 - models.evaluator - INFO - Evaluated svm: Accuracy = 0.9650
+2026-09-28 23:54:04,468 - models.evaluator - INFO - Evaluated neural_network: Accuracy = 0.9550
+2026-09-28 23:54:04,468 - models.evaluator - INFO - Evaluating regression models
+2026-09-28 23:54:04,475 - models.evaluator - INFO - Evaluated linear_regression: R² = 0.5646
+2026-09-28 23:54:04,481 - models.evaluator - INFO - Evaluated ridge: R² = 0.5646
+2026-09-28 23:54:04,485 - models.evaluator - INFO - Evaluated lasso: R² = 0.5657
+2026-09-28 23:54:04,492 - models.evaluator - INFO - Evaluated gradient_boosting: R² = 0.5696
+2026-09-28 23:54:04,511 - models.evaluator - INFO - Evaluated xgboost_regressor: R² = 0.4725
+2026-09-28 23:54:04,511 - models.evaluator - INFO - Evaluating clustering models
+2026-09-28 23:54:04,559 - models.evaluator - INFO - Evaluated kmeans: Clusters = 5
+2026-09-28 23:54:04,560 - models.evaluator - INFO - Evaluated dbscan: Clusters = 0
+2026-09-28 23:54:04,560 - models.evaluator - INFO - Evaluating anomaly detection models
+2026-09-28 23:54:04,586 - models.evaluator - INFO - Evaluated isolation_forest: Anomalies = 100 (10.00%)
+2026-09-28 23:54:04,609 - models.evaluator - INFO - Evaluated one_class_svm: Anomalies = 111 (11.10%)
+2026-09-28 23:54:04,610 - models.evaluator - INFO - Model evaluation completed
+2026-09-28 23:54:04,610 - models.evaluator - INFO - Saving evaluation results to reports
+2026-09-28 23:54:04,639 - models.evaluator - INFO - Saved evaluation results to reports\evaluation_results.joblib
+2026-09-28 23:54:04,640 - models.evaluator - INFO - Saved evaluation summary to reports\evaluation_summary.json
+2026-09-28 23:54:04,640 - __main__ - INFO - Model evaluation completed
+2026-09-28 23:54:04,640 - __main__ - INFO - Step 5: Report Generation
+2026-09-28 23:54:04,641 - reports.generator - INFO - Starting comprehensive report generation
+2026-09-28 23:54:08,865 - reports.generator - INFO - JSON summary saved to reports\expense_analysis_report_20260928_235404_summary.json
+2026-09-28 23:54:12,872 - reports.generator - INFO - Predictions saved to reports\predictions\expense_predictions_20260928_235404.json
+2026-09-28 23:54:12,873 - reports.generator - INFO - Comprehensive report generated: reports\expense_analysis_report_20260928_235404.pdf
+2026-09-28 23:54:12,873 - reports.generator - INFO - JSON summary generated: reports\expense_analysis_report_20260928_235404_summary.json
+2026-09-28 23:54:12,873 - reports.generator - INFO - Visualizations saved to: reports\plots
+2026-09-28 23:54:12,873 - reports.generator - INFO - Predictions saved to: reports\predictions
+2026-09-28 23:54:12,873 - __main__ - INFO - Report generation completed
+2026-09-28 23:54:12,873 - __main__ - INFO - ML Expense Analyzer Pipeline completed successfully!
+2026-09-28 23:54:20,546 - __main__ - INFO - Starting ML Expense Analyzer Pipeline
+2026-09-28 23:54:20,549 - __main__ - INFO - Loaded configuration from config.yaml
+2026-09-28 23:54:20,550 - __main__ - INFO - Step 1: Data Preprocessing
+2026-09-28 23:54:20,550 - __main__ - INFO - Loading data from data/sample_expenses.csv
+2026-09-28 23:54:20,550 - data.preprocess - INFO - Loading data from data/sample_expenses.csv
+2026-09-28 23:54:20,553 - data.preprocess - INFO - Loaded 61 rows and 6 columns
+2026-09-28 23:54:20,554 - data.preprocess - INFO - Starting data preprocessing
+2026-09-28 23:54:20,560 - data.preprocess - INFO - Preprocessing completed. Final dataset: 61 rows
+2026-09-28 23:54:20,563 - data.preprocess - INFO - Saved processed data to data\processed\processed_expenses.csv
+2026-09-28 23:54:20,563 - __main__ - INFO - Data preprocessing completed
+2026-09-28 23:54:20,563 - __main__ - INFO - Step 2: Feature Engineering
+2026-09-28 23:54:20,563 - features.engineer - INFO - Starting feature engineering
+2026-09-28 23:54:20,563 - features.engineer - INFO - Extracting time-based features
+2026-09-28 23:54:20,568 - features.engineer - INFO - Extracting amount-based features
+2026-09-28 23:54:20,571 - features.engineer - INFO - Extracting text-based features
+2026-09-28 23:54:20,580 - features.engineer - INFO - Added 34 TF-IDF features
+2026-09-28 23:54:20,580 - features.engineer - INFO - Encoding categorical feature: category
+2026-09-28 23:54:20,594 - features.engineer - INFO - Added 7 one-hot encoded features for category
+2026-09-28 23:54:20,594 - features.engineer - INFO - Encoding categorical feature: currency
+2026-09-28 23:54:20,596 - features.engineer - INFO - Added 0 one-hot encoded features for currency
+2026-09-28 23:54:20,596 - features.engineer - INFO - Encoding categorical feature: payment_method
+2026-09-28 23:54:20,598 - features.engineer - INFO - Added 3 one-hot encoded features for payment_method
+2026-09-28 23:54:20,598 - features.engineer - INFO - Creating interaction features
+2026-09-28 23:54:20,599 - features.engineer - INFO - Feature engineering completed. Features: 82 columns
+2026-09-28 23:54:20,602 - features.engineer - INFO - Saved featured data to data\processed\featured_expenses.csv
+2026-09-28 23:54:20,602 - __main__ - INFO - Feature engineering completed
+2026-09-28 23:54:20,602 - __main__ - INFO - Step 3: Model Training
+2026-09-28 23:54:20,602 - models.trainer - INFO - Starting model training for all model types
+2026-09-28 23:54:20,602 - models.trainer - INFO - Preparing features and targets
+2026-09-28 23:54:20,610 - models.trainer - INFO - Prepared features: 63 columns, 61 samples
+2026-09-28 23:54:20,610 - models.trainer - INFO - Classification target: 8 classes
+2026-09-28 23:54:20,610 - models.trainer - INFO - Regression target: amount
+2026-09-28 23:54:20,610 - models.trainer - INFO - Training classification models
+2026-09-28 23:54:20,610 - models.trainer - INFO - Training classification models
+2026-09-28 23:54:20,618 - models.trainer - INFO - Training random_forest...
+2026-09-28 23:54:20,759 - models.trainer - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:20,760 - models.trainer - INFO - random_forest - Accuracy: 0.5385
+2026-09-28 23:54:20,760 - models.trainer - INFO - Training xgboost...
+2026-09-28 23:54:21,015 - models.trainer - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:21,015 - models.trainer - INFO - xgboost - Accuracy: 0.3846
+2026-09-28 23:54:21,015 - models.trainer - INFO - Training lightgbm...
+2026-09-28 23:54:21,073 - models.trainer - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:21,074 - models.trainer - INFO - lightgbm - Accuracy: 0.0769
+2026-09-28 23:54:21,074 - models.trainer - INFO - Training svm...
+2026-09-28 23:54:21,097 - models.trainer - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:21,097 - models.trainer - INFO - svm - Accuracy: 0.6154
+2026-09-28 23:54:21,097 - models.trainer - INFO - Training neural_network...
+2026-09-28 23:54:21,192 - models.trainer - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:21,192 - models.trainer - INFO - neural_network - Accuracy: 0.7692
+2026-09-28 23:54:21,192 - models.trainer - INFO - Training regression models
+2026-09-28 23:54:21,192 - models.trainer - INFO - Training regression models
+2026-09-28 23:54:21,196 - models.trainer - INFO - Training linear_regression...
+2026-09-28 23:54:21,199 - models.trainer - INFO - linear_regression - R²: -0.0864
+2026-09-28 23:54:21,199 - models.trainer - INFO - Training ridge...
+2026-09-28 23:54:21,201 - models.trainer - INFO - ridge - R²: -0.0864
+2026-09-28 23:54:21,201 - models.trainer - INFO - Training lasso...
+2026-09-28 23:54:21,203 - models.trainer - INFO - lasso - R²: -0.6247
+2026-09-28 23:54:21,203 - models.trainer - INFO - Training gradient_boosting...
+2026-09-28 23:54:21,237 - models.trainer - INFO - gradient_boosting - R²: -0.0598
+2026-09-28 23:54:21,237 - models.trainer - INFO - Training xgboost_regressor...
+2026-09-28 23:54:21,372 - models.trainer - INFO - xgboost_regressor - R²: 0.2540
+2026-09-28 23:54:21,372 - models.trainer - INFO - Training clustering models
+2026-09-28 23:54:21,372 - models.trainer - INFO - Training clustering models
+2026-09-28 23:54:21,375 - models.trainer - INFO - Training kmeans...
+2026-09-28 23:54:21,440 - models.trainer - INFO - kmeans - Clusters: 5, Noise points: 0
+2026-09-28 23:54:21,440 - models.trainer - INFO - Training dbscan...
+2026-09-28 23:54:21,444 - models.trainer - INFO - dbscan - Clusters: 0, Noise points: 61
+2026-09-28 23:54:21,444 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:54:21,444 - models.trainer - INFO - Training anomaly detection models
+2026-09-28 23:54:21,447 - models.trainer - INFO - Training isolation_forest...
+2026-09-28 23:54:21,590 - models.trainer - INFO - isolation_forest - Anomalies detected: 6 (9.84%)
+2026-09-28 23:54:21,591 - models.trainer - INFO - Training one_class_svm...
+2026-09-28 23:54:21,592 - models.trainer - INFO - one_class_svm - Anomalies detected: 19 (31.15%)
+2026-09-28 23:54:21,592 - models.trainer - INFO - Model training completed
+2026-09-28 23:54:21,592 - models.trainer - INFO - Saving models to models
+2026-09-28 23:54:21,613 - models.trainer - INFO - Saved classification/random_forest to models\classification_random_forest.joblib
+2026-09-28 23:54:21,624 - models.trainer - INFO - Saved classification/xgboost to models\classification_xgboost.joblib
+2026-09-28 23:54:21,643 - models.trainer - INFO - Saved classification/lightgbm to models\classification_lightgbm.joblib
+2026-09-28 23:54:21,645 - models.trainer - INFO - Saved classification/svm to models\classification_svm.joblib
+2026-09-28 23:54:21,650 - models.trainer - INFO - Saved classification/neural_network to models\classification_neural_network.joblib
+2026-09-28 23:54:21,651 - models.trainer - INFO - Saved regression/linear_regression to models\regression_linear_regression.joblib
+2026-09-28 23:54:21,651 - models.trainer - INFO - Saved regression/ridge to models\regression_ridge.joblib
+2026-09-28 23:54:21,652 - models.trainer - INFO - Saved regression/lasso to models\regression_lasso.joblib
+2026-09-28 23:54:21,656 - models.trainer - INFO - Saved regression/gradient_boosting to models\regression_gradient_boosting.joblib
+2026-09-28 23:54:21,664 - models.trainer - INFO - Saved regression/xgboost_regressor to models\regression_xgboost_regressor.joblib
+2026-09-28 23:54:21,666 - models.trainer - INFO - Saved clustering/kmeans to models\clustering_kmeans.joblib
+2026-09-28 23:54:21,668 - models.trainer - INFO - Saved clustering/dbscan to models\clustering_dbscan.joblib
+2026-09-28 23:54:21,702 - models.trainer - INFO - Saved anomaly_detection/isolation_forest to models\anomaly_detection_isolation_forest.joblib
+2026-09-28 23:54:21,704 - models.trainer - INFO - Saved anomaly_detection/one_class_svm to models\anomaly_detection_one_class_svm.joblib
+2026-09-28 23:54:21,705 - models.trainer - INFO - Saved model performance to models\model_performance.joblib
+2026-09-28 23:54:21,705 - __main__ - INFO - Model training completed
+2026-09-28 23:54:21,705 - __main__ - INFO - Step 4: Model Evaluation
+2026-09-28 23:54:21,705 - models.evaluator - INFO - Starting model evaluation
+2026-09-28 23:54:21,707 - models.evaluator - INFO - Evaluating classification models
+2026-09-28 23:54:21,793 - models.evaluator - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:21,878 - models.evaluator - INFO - Evaluated random_forest: Accuracy = 0.5385
+2026-09-28 23:54:21,893 - models.evaluator - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:21,906 - models.evaluator - INFO - Evaluated xgboost: Accuracy = 0.3846
+2026-09-28 23:54:21,930 - models.evaluator - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:21,941 - models.evaluator - INFO - Evaluated lightgbm: Accuracy = 0.0769
+2026-09-28 23:54:21,954 - models.evaluator - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:21,962 - models.evaluator - INFO - Evaluated svm: Accuracy = 0.6154
+2026-09-28 23:54:21,971 - models.evaluator - WARNING - Could not compute ROC-AUC: Number of classes in y_true not equal to the number of columns in 'y_score'
+2026-09-28 23:54:21,980 - models.evaluator - INFO - Evaluated neural_network: Accuracy = 0.7692
+2026-09-28 23:54:21,980 - models.evaluator - INFO - Evaluating regression models
+2026-09-28 23:54:21,986 - models.evaluator - INFO - Evaluated linear_regression: R² = -0.0864
+2026-09-28 23:54:21,990 - models.evaluator - INFO - Evaluated ridge: R² = -0.0864
+2026-09-28 23:54:21,993 - models.evaluator - INFO - Evaluated lasso: R² = -0.6247
+2026-09-28 23:54:21,997 - models.evaluator - INFO - Evaluated gradient_boosting: R² = -0.0598
+2026-09-28 23:54:22,009 - models.evaluator - INFO - Evaluated xgboost_regressor: R² = 0.2540
+2026-09-28 23:54:22,009 - models.evaluator - INFO - Evaluating clustering models
+2026-09-28 23:54:22,013 - models.evaluator - INFO - Evaluated kmeans: Clusters = 5
+2026-09-28 23:54:22,013 - models.evaluator - INFO - Evaluated dbscan: Clusters = 0
+2026-09-28 23:54:22,013 - models.evaluator - INFO - Evaluating anomaly detection models
+2026-09-28 23:54:22,022 - models.evaluator - INFO - Evaluated isolation_forest: Anomalies = 6 (9.84%)
+2026-09-28 23:54:22,023 - models.evaluator - INFO - Evaluated one_class_svm: Anomalies = 19 (31.15%)
+2026-09-28 23:54:22,023 - models.evaluator - INFO - Model evaluation completed
+2026-09-28 23:54:22,023 - models.evaluator - INFO - Saving evaluation results to reports
+2026-09-28 23:54:22,027 - models.evaluator - INFO - Saved evaluation results to reports\evaluation_results.joblib
+2026-09-28 23:54:22,028 - models.evaluator - INFO - Saved evaluation summary to reports\evaluation_summary.json
+2026-09-28 23:54:22,028 - __main__ - INFO - Model evaluation completed
+2026-09-28 23:54:22,028 - __main__ - INFO - Step 5: Report Generation
+2026-09-28 23:54:22,029 - reports.generator - INFO - Starting comprehensive report generation
+2026-09-28 23:54:25,797 - reports.generator - INFO - JSON summary saved to reports\expense_analysis_report_20260928_235422_summary.json
+2026-09-28 23:54:29,612 - reports.generator - INFO - Predictions saved to reports\predictions\expense_predictions_20260928_235422.json
+2026-09-28 23:54:29,612 - reports.generator - INFO - Comprehensive report generated: reports\expense_analysis_report_20260928_235422.pdf
+2026-09-28 23:54:29,612 - reports.generator - INFO - JSON summary generated: reports\expense_analysis_report_20260928_235422_summary.json
+2026-09-28 23:54:29,612 - reports.generator - INFO - Visualizations saved to: reports\plots
+2026-09-28 23:54:29,613 - reports.generator - INFO - Predictions saved to: reports\predictions
+2026-09-28 23:54:29,613 - __main__ - INFO - Report generation completed
+2026-09-28 23:54:29,613 - __main__ - INFO - ML Expense Analyzer Pipeline completed successfully!

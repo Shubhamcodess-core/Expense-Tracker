@@ -1,0 +1,121 @@
+{
+  "project_info": {
+    "name": "ML Expense Analyzer",
+    "version": "1.0.0",
+    "description": "Machine Learning project for personal expense analysis and prediction",
+    "generated_at": "2026-09-28T23:54:25.795281"
+  },
+  "data_summary": {
+    "total_records": 61,
+    "date_range": {
+      "start": "2026-01-01T00:00:00",
+      "end": "2026-01-31T00:00:00"
+    },
+    "total_expenses": 2238.5,
+    "average_transaction": 36.69672131147541,
+    "unique_categories": 8,
+    "features_original": 8,
+    "features_engineered": 82,
+    "features_total": 82
+  },
+  "model_performance": {
+    "classification": {
+      "random_forest": {
+        "accuracy": 0.5384615384615384,
+        "precision": 0.37728937728937734,
+        "recall": 0.5384615384615384,
+        "f1_score": 0.4358974358974359,
+        "roc_auc": 0.0
+      },
+      "xgboost": {
+        "accuracy": 0.38461538461538464,
+        "precision": 0.2454212454212454,
+        "recall": 0.38461538461538464,
+        "f1_score": 0.2948717948717948,
+        "roc_auc": 0.0
+      },
+      "lightgbm": {
+        "accuracy": 0.07692307692307693,
+        "precision": 0.0641025641025641,
+        "recall": 0.07692307692307693,
+        "f1_score": 0.06993006993006994,
+        "roc_auc": 0.0
+      },
+      "svm": {
+        "accuracy": 0.6153846153846154,
+        "precision": 0.47115384615384615,
+        "recall": 0.6153846153846154,
+        "f1_score": 0.5266272189349113,
+        "roc_auc": 0.0
+      },
+      "neural_network": {
+        "accuracy": 0.7692307692307693,
+        "precision": 0.6666666666666667,
+        "recall": 0.7692307692307693,
+        "f1_score": 0.7086247086247085,
+        "roc_auc": 0.0
+      }
+    },
+    "regression": {
+      "linear_regression": {
+        "r2": -0.08644758836567523,
+        "mae": 32.926953786010614,
+        "rmse": 39.972364599126976,
+        "mape": 117.3594858654353
+      },
+      "ridge": {
+        "r2": -0.08644758836567523,
+        "mae": 32.926953786010614,
+        "rmse": 39.972364599126976,
+        "mape": 117.3594858654353
+      },
+      "lasso": {
+        "r2": -0.6246645419154158,
+        "mae": 40.17156212417097,
+        "rmse": 48.880686990135445,
+        "mape": 148.35533939124446
+      },
+      "gradient_boosting": {
+        "r2": -0.059764024936568516,
+        "mae": 28.542904969254227,
+        "rmse": 39.4784448400226,
+        "mape": 77.00430160952364
+      },
+      "xgboost_regressor": {
+        "r2": 0.25395819145617815,
+        "mae": 24.653642434340256,
+        "rmse": 33.12356198748386,
+        "mape": 65.21941545514512
+      }
+    },
+    "clustering": {
+      "kmeans": {
+        "n_clusters": 5,
+        "n_noise_points": 0,
+        "silhouette_score": 0.05788902646533852
+      },
+      "dbscan": {
+        "n_clusters": 0,
+        "n_noise_points": 61,
+        "silhouette_score": null
+      }
+    },
+    "anomaly_detection": {
+      "isolation_forest": {
+        "anomaly_rate": 0.09836065573770492,
+        "n_anomalies": "6"
+      },
+      "one_class_svm": {
+        "anomaly_rate": 0.3114754098360656,
+        "n_anomalies": "19"
+      }
+    }
+  },
+  "recommendations": [
+    "Deploy categorization model for real-time expense tagging",
+    "Implement monthly spending forecasts",
+    "Set up anomaly alerts for unusual transactions",
+    "Integrate with banking APIs for automatic data feeds",
+    "Develop web dashboard for interactive visualization"
+  ]
+}
