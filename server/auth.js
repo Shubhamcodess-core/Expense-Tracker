@@ -141,6 +141,52 @@ function extractToken(req) {
     return null;
 }
 
+// ─── OAuth State CSRF Protection Helpers ─────────────────────────────────────
+
+const OAUTH_STATE_TTL_MS = 15 * 60 * 1000; // 15 minutes
+
+function createOAuthState(extraData = {}) {
+    const secret = getSessionSecret();
+    const data = {
+        nonce: crypto.randomBytes(16).toString('hex'),
+        timestamp: Date.now(),
+        ...extraData
+    };
+    const payloadB64 = base64UrlEncode(JSON.stringify(data));
+    const signature = crypto
+        .createHmac('sha256', secret)
+        .update(payloadB64)
+        .digest('base64url');
+    return `${payloadB64}.${signature}`;
+}
+
+function verifyOAuthState(state) {
+    if (!state || typeof state !== 'string') return null;
+    const parts = state.split('.');
+    if (parts.length !== 2) return null;
+    const [payloadB64, signature] = parts;
+    const secret = getSessionSecret();
+    const expectedSig = crypto
+        .createHmac('sha256', secret)
+        .update(payloadB64)
+        .digest('base64url');
+
+    try {
+        const sigA = Buffer.from(signature);
+        const sigB = Buffer.from(expectedSig);
+        if (sigA.length !== sigB.length || !crypto.timingSafeEqual(sigA, sigB)) {
+            return null;
+        }
+        const data = JSON.parse(base64UrlDecode(payloadB64));
+        if (!data || !data.timestamp || (Date.now() - data.timestamp) > OAUTH_STATE_TTL_MS) {
+            return null;
+        }
+        return data;
+    } catch {
+        return null;
+    }
+}
+
 // ─── Express Middleware ────────────────────────────────────────────────────────
 
 function requireAuth(req, res, next) {
@@ -165,5 +211,7 @@ module.exports = {
     setSessionCookie,
     clearSessionCookie,
     extractToken,
+    createOAuthState,
+    verifyOAuthState,
     requireAuth
 };

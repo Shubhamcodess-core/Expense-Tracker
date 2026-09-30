@@ -134,6 +134,9 @@ function serializeUsersCsv(users) {
 
 // ─── Google Drive Client Initialization ─────────────────────────────────────────
 
+const PROD_REDIRECT_URI = 'https://expense-tracker-two-jade-31.vercel.app/api/auth/google/callback';
+const DEFAULT_FOLDER_ID = '1iMR64LMXn6Zrl4u4n_DWndai4n-Cws4f';
+
 // In-memory mock store used when MOCK_DRIVE === '1' for automated testing
 const mockFiles = new Map();
 let mockIdCounter = 1;
@@ -148,25 +151,50 @@ function _getMockFiles() {
     return Array.from(mockFiles.values());
 }
 
+function getRedirectUri(req) {
+    if (process.env.GOOGLE_REDIRECT_URI) {
+        return process.env.GOOGLE_REDIRECT_URI;
+    }
+    if (req) {
+        const host = req.get ? req.get('host') : (req.headers ? req.headers.host : '');
+        if (host && (host.includes('localhost') || host.includes('127.0.0.1'))) {
+            const proto = req.protocol || 'http';
+            return `${proto}://${host}/api/auth/google/callback`;
+        }
+    }
+    return PROD_REDIRECT_URI;
+}
+
 function getCredentials() {
     if (process.env.MOCK_DRIVE === '1') {
         return {
-            folderId: 'mock-folder-id',
-            clientEmail: 'mock-service-account@expenseiq-test.iam.gserviceaccount.com',
-            privateKey: '-----BEGIN RSA PRIVATE KEY-----\nMOCK_KEY\n-----END RSA PRIVATE KEY-----'
+            folderId: process.env.GOOGLE_DRIVE_FOLDER_ID || 'mock-folder-id',
+            clientId: process.env.GOOGLE_CLIENT_ID || 'mock-client-id',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'mock-client-secret',
+            refreshToken: process.env.GOOGLE_REFRESH_TOKEN || 'mock-refresh-token'
         };
     }
 
-    const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
-    const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-    const privateKeyRaw = process.env.GOOGLE_PRIVATE_KEY;
+    const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID || DEFAULT_FOLDER_ID;
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+    const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
 
-    if (!folderId || !clientEmail || !privateKeyRaw) {
+    if (!clientId || !clientSecret || !refreshToken) {
         return null;
     }
 
-    const privateKey = privateKeyRaw.replace(/\\n/g, '\n');
-    return { folderId, clientEmail, privateKey };
+    return { folderId, clientId, clientSecret, refreshToken };
+}
+
+function getOAuth2Client(redirectUri) {
+    const creds = getCredentials();
+    const clientId = (creds && creds.clientId) || process.env.GOOGLE_CLIENT_ID || 'mock-client-id';
+    const clientSecret = (creds && creds.clientSecret) || process.env.GOOGLE_CLIENT_SECRET || 'mock-client-secret';
+    const uri = redirectUri || PROD_REDIRECT_URI;
+
+    const google = getGoogle();
+    return new google.auth.OAuth2(clientId, clientSecret, uri);
 }
 
 function getDriveClient() {
@@ -177,19 +205,23 @@ function getDriveClient() {
     const creds = getCredentials();
     if (!creds) {
         throw new Error(
-            'Google Drive is not configured. Please set GOOGLE_DRIVE_FOLDER_ID, GOOGLE_SERVICE_ACCOUNT_EMAIL, and GOOGLE_PRIVATE_KEY in your environment.'
+            'Google Drive OAuth is not configured. Please set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REFRESH_TOKEN in your environment.'
         );
     }
 
     const google = getGoogle();
-    const auth = new google.auth.JWT({
-        email: creds.clientEmail,
-        key: creds.privateKey,
-        scopes: ['https://www.googleapis.com/auth/drive']
+    const oauth2Client = new google.auth.OAuth2(
+        creds.clientId,
+        creds.clientSecret,
+        PROD_REDIRECT_URI
+    );
+
+    oauth2Client.setCredentials({
+        refresh_token: creds.refreshToken
     });
 
     return {
-        drive: google.drive({ version: 'v3', auth }),
+        drive: google.drive({ version: 'v3', auth: oauth2Client }),
         folderId: creds.folderId
     };
 }
@@ -316,6 +348,10 @@ async function getOrCreateUsersCsv(folderId) {
 module.exports = {
     getCredentials,
     getDriveClient,
+    getOAuth2Client,
+    getRedirectUri,
+    PROD_REDIRECT_URI,
+    DEFAULT_FOLDER_ID,
     findFileByName,
     createCsvFile,
     readCsvFile,

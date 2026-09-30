@@ -63,8 +63,162 @@ app.use(cookieParser());
 // Serve static frontend when running locally
 app.use(express.static(ROOT_DIR, { index: 'index.html' }));
 
+function escapeHtml(str) {
+    return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // ─── Authentication Routes (/api/auth) ─────────────────────────────────────────
 const authRouter = express.Router();
+
+// GET /api/auth/google — Initiate Google Drive OAuth 2.0 flow
+authRouter.get('/google', (req, res) => {
+    try {
+        const clientId = process.env.GOOGLE_CLIENT_ID;
+        const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+        if (!clientId || !clientSecret) {
+            return res.status(500).json({
+                success: false,
+                error: 'GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be configured in environment variables.'
+            });
+        }
+
+        const redirectUri = drive.getRedirectUri(req);
+        const state = auth.createOAuthState({ redirectUri });
+
+        // Set state cookie for anti-CSRF validation
+        const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
+        res.cookie('oauth_state', state, {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: 'lax',
+            path: '/',
+            maxAge: 15 * 60 * 1000
+        });
+
+        const oauth2Client = drive.getOAuth2Client(redirectUri);
+        const authUrl = oauth2Client.generateAuthUrl({
+            access_type: 'offline',
+            scope: ['https://www.googleapis.com/auth/drive'],
+            include_granted_scopes: true,
+            prompt: 'consent',
+            state: state
+        });
+
+        if (req.headers.accept && req.headers.accept.includes('application/json') && !req.query.redirect) {
+            return res.json({ success: true, url: authUrl, state });
+        }
+
+        res.redirect(authUrl);
+    } catch (err) {
+        console.error('[Google OAuth URL Generation Error]', err.message);
+        res.status(500).json({ success: false, error: 'Failed to generate authorization URL: ' + err.message });
+    }
+});
+
+// GET /api/auth/google/callback — Google OAuth 2.0 Callback
+authRouter.get('/google/callback', async (req, res) => {
+    try {
+        const { code, state, error } = req.query;
+
+        if (error) {
+            return res.status(400).send(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Authorization Cancelled - ExpenseIQ</title>
+                    <style>
+                        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+                        .card { background: #1e293b; border: 1px solid #ef4444; border-radius: 16px; padding: 36px; max-width: 480px; width: 100%; text-align: center; }
+                        h2 { color: #f87171; margin-top: 0; }
+                        a { color: #38bdf8; text-decoration: none; font-weight: 600; }
+                    </style>
+                </head>
+                <body>
+                    <div class="card">
+                        <h2>Google Authorization Cancelled</h2>
+                        <p>Google returned an error: <strong>${escapeHtml(error)}</strong></p>
+                        <p><a href="/">Return to Expense Tracker</a></p>
+                    </div>
+                </body>
+                </html>
+            `);
+        }
+
+        if (!code || !state) {
+            return res.status(400).json({ success: false, error: 'Missing code or state parameter.' });
+        }
+
+        // Validate state
+        const stateData = auth.verifyOAuthState(state);
+        const cookieState = req.cookies ? req.cookies.oauth_state : null;
+        if (!stateData || (cookieState && cookieState !== state)) {
+            return res.status(400).json({ success: false, error: 'Invalid or expired OAuth state.' });
+        }
+
+        // Clear state cookie
+        res.clearCookie('oauth_state', { path: '/' });
+
+        const redirectUri = stateData.redirectUri || drive.getRedirectUri(req);
+        const oauth2Client = drive.getOAuth2Client(redirectUri);
+
+        const { tokens } = await oauth2Client.getToken(code);
+
+        // DO NOT log tokens!
+        // DO NOT expose refresh token in the response!
+        const hasRefreshToken = !!(tokens && tokens.refresh_token);
+        console.log('[Google OAuth] Token exchange completed. Refresh token obtained: ' + (hasRefreshToken ? 'YES' : 'NO'));
+
+        if (req.headers.accept && req.headers.accept.includes('application/json')) {
+            return res.json({
+                success: true,
+                message: 'Authorization succeeded. Configure GOOGLE_REFRESH_TOKEN in your environment.',
+                hasRefreshToken
+            });
+        }
+
+        res.send(`
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Google Drive Connected - ExpenseIQ</title>
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
+                    .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 36px; max-width: 520px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
+                    .icon { width: 56px; height: 56px; border-radius: 12px; background: rgba(34, 197, 94, 0.15); color: #22c55e; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 20px; }
+                    h2 { margin: 0 0 12px 0; font-size: 1.5rem; color: #f8fafc; }
+                    p { color: #94a3b8; line-height: 1.6; font-size: 0.95rem; margin: 0 0 16px 0; }
+                    .notice { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 16px; margin: 20px 0; color: #93c5fd; font-size: 0.9rem; line-height: 1.5; }
+                    .btn { display: inline-block; background: #3b82f6; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; margin-top: 8px; transition: background 0.2s; }
+                    .btn:hover { background: #2563eb; }
+                </style>
+            </head>
+            <body>
+                <div class="card">
+                    <div class="icon">✓</div>
+                    <h2>Google Drive Authorization Succeeded</h2>
+                    <p>The backend has successfully connected to Google OAuth 2.0.</p>
+                    <div class="notice">
+                        <strong>Configuration Step:</strong><br>
+                        Ensure <code>GOOGLE_REFRESH_TOKEN</code> is securely configured in your Vercel Project Environment Variables, along with <code>GOOGLE_CLIENT_ID</code>, <code>GOOGLE_CLIENT_SECRET</code>, and <code>GOOGLE_DRIVE_FOLDER_ID</code>.
+                    </div>
+                    <a href="/" class="btn">Return to Expense Tracker</a>
+                </div>
+            </body>
+            </html>
+        `);
+    } catch (err) {
+        console.error('[Google OAuth Callback Error]', err.message);
+        res.status(500).json({ success: false, error: 'OAuth exchange failed: ' + err.message });
+    }
+});
 
 // POST /api/auth/register
 authRouter.post('/register', async (req, res) => {
@@ -374,7 +528,7 @@ app.get('/api/health', (req, res) => {
     const creds = drive.getCredentials();
     res.json({
         status: 'ok',
-        storage: creds ? 'google_drive' : 'unconfigured',
+        storage: creds ? 'google_drive_oauth2' : 'unconfigured',
         uptime: process.uptime()
     });
 });
@@ -404,7 +558,7 @@ if (require.main === module) {
         console.log('');
         console.log('  ExpenseIQ - Personal Expense Tracker');
         console.log('  Server  -> http://localhost:' + PORT);
-        console.log('  Storage -> Google Drive ' + (creds ? '[Configured]' : '[MISSING CREDENTIALS in .env]'));
+        console.log('  Storage -> Google Drive OAuth2 ' + (creds ? '[Configured]' : '[MISSING OAUTH CREDENTIALS in .env]'));
         console.log('');
     });
 }

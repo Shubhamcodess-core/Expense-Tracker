@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node server/server.js",
+    "get-token": "node scripts/get-google-refresh-token.js",
     "test": "node -e \"process.env.MOCK_DRIVE='1'; require('./server/server'); console.log('Backend compiled and verified successfully'); process.exit(0);\""
   },
   "keywords": [],
